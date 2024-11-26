@@ -1,0 +1,203 @@
+:host * {
+  /*
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  */
+  white-space: normal;
+  font-family: Arial, Helvetica;
+  font-size: 16px;
+  visibility: visible !important;
+}
+
+mjx-container,
+mjx-container *,
+math,
+math * {
+  font-size: 16px !important;
+  line-height: 30px !important;
+}
+
+.mai_back {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(19, 19, 19, 0.7);
+  overflow-y: auto;
+}
+.mai_back button {
+  margin: unset;
+  padding: unset;
+  background-color: unset;
+  border: unset;
+}
+.mai_back .dialog {
+  width: 370px;
+  background-color: #ffffff;
+}
+.mai_back .dialog .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: rgb(81, 80, 246);
+}
+.mai_back .dialog .header .left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.mai_back .dialog .header .left .logo {
+  width: 28px;
+  height: 28px;
+}
+.mai_back .dialog .header .left .title {
+  font-size: 18px;
+  color: #ffffff;
+  margin-left: 7px;
+}
+.mai_back .dialog .header .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.mai_back .dialog .header .right .cross {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.mai_back .dialog .content-wrap {
+  padding: 10px;
+}
+.mai_back .dialog .content-wrap .content {
+  padding: 20px 20px;
+  font-size: 16px;
+  line-height: 30px;
+  overflow-y: auto;
+  max-height: 200px;
+}
+.mai_back .dialog .content-wrap .content::-webkit-scrollbar {
+  width: 5px;
+}
+.mai_back .dialog .content-wrap .content::-webkit-scrollbar-track {
+  background: rgb(241, 241, 240);
+  border-radius: 10px;
+}
+.mai_back .dialog .content-wrap .content::-webkit-scrollbar-thumb {
+  background: rgb(191, 191, 191);
+  border-radius: 10px;
+}
+.mai_back .dialog .content-wrap .content::-webkit-scrollbar-thumb:hover {
+  background: rgb(105, 105, 105);
+}
+.mai_back .green-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: rgb(227, 255, 234);
+}
+.mai_back .green-block .left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.mai_back .green-block .rate-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.mai_back .green-block .rate-block .text {
+  font-size: 14px;
+  line-height: 16.5px;
+  font-weight: bold;
+}
+.mai_back .green-block .rate-block .star-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 3px;
+}
+.mai_back .green-block .rate-block .star-row .star {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.mai_back .green-block .rate-block .star-row .star svg path {
+  fill: #cfcfcf;
+  transition: 0.3s;
+}
+.mai_back .green-block .rate-block .star-row .star.hover svg path, .mai_back .green-block .rate-block .star-row .star.active svg path {
+  fill: rgb(255, 185, 33);
+}
+.mai_back .upload-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0px;
+  width: 100%;
+}
+.mai_back .upload-preview img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 100px;
+  width: 100%;
+}
+.mai_back .actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 30px;
+}
+.mai_back .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 13px;
+  border-radius: 6px;
+  background-color: rgb(81, 80, 246);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.mai_back .btn:hover, .mai_back .btn:active {
+  background-color: rgb(43, 43, 192);
+}
+.mai_back .btn .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+.mai_back .btn .icon svg {
+  width: 19px;
+  height: auto;
+}
+.mai_back .btn .text {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 16.5px;
+  margin-left: 5px;
+}
+.mai_back .btn.copy-btn {
+  background-color: rgb(0, 199, 96);
+}
+.mai_back .btn.copy-btn:hover, .mai_back .btn.copy-btn:active {
+  background-color: rgb(17, 140, 76);
+}
+
+.hidden {
+  display: none;
+}/*# sourceMappingURL=dialog.css.map */

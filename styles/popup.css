@@ -1,0 +1,198 @@
+* {
+  font-family: Arial;
+}
+
+body {
+  margin: 0px !important;
+  width: 370px;
+}
+
+button {
+  margin: unset;
+  padding: unset;
+  background-color: unset;
+  border: unset;
+}
+
+.main-popup .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: rgb(81, 80, 246);
+}
+.main-popup .header .left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.main-popup .header .left .logo {
+  width: 28px;
+  height: 28px;
+}
+.main-popup .header .left .title {
+  font-size: 18px;
+  color: #ffffff;
+  margin-left: 7px;
+}
+.main-popup .header .right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.main-popup .header .right .cross {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.main-popup .content {
+  padding: 30px;
+}
+.main-popup .content .description {
+  font-size: 14px;
+  line-height: 16.5px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 20px;
+}
+.radio-group label {
+  width: 100%;
+}
+.radio-group label .radio-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+  border-radius: 8px;
+  border: 1px solid rgb(206, 206, 255);
+  transition: 0.3s;
+}
+.radio-group label .radio-item .icon circle.outer {
+  stroke: rgb(206, 206, 255);
+}
+.radio-group label .radio-item .icon circle.inner {
+  stroke: transparent;
+  fill: transparent;
+}
+.radio-group label .radio-item .title {
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.radio-group label input[type=radio] {
+  display: none;
+}
+.radio-group label input[type=radio]:checked ~ .radio-item {
+  background-color: rgb(227, 255, 234);
+  border-color: rgb(0, 226, 145);
+}
+.radio-group label input[type=radio]:checked ~ .radio-item .icon circle.outer {
+  stroke: rgb(0, 226, 145);
+  transition: 0.3s;
+}
+.radio-group label input[type=radio]:checked ~ .radio-item .icon circle.inner {
+  stroke: rgb(0, 226, 145);
+  fill: rgb(0, 226, 145);
+  transition: 0.3s;
+}
+.radio-group label + label {
+  margin-top: 20px;
+}
+
+.rate-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(227, 255, 234);
+  padding: 15px 30px;
+  margin-top: 30px;
+}
+.rate-block .text {
+  font-size: 14px;
+  line-height: 16.5px;
+  font-weight: bold;
+}
+.rate-block .star-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.rate-block .star-row .star {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.rate-block .star-row .star svg path {
+  fill: #cfcfcf;
+  transition: 0.3s;
+}
+.rate-block .star-row .star.hover svg path, .rate-block .star-row .star.active svg path {
+  fill: rgb(255, 185, 33);
+}
+
+.upload-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0px;
+  width: 100%;
+}
+.upload-preview img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 100px;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 30px;
+}
+.actions .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 13px;
+  border-radius: 6px;
+  background-color: rgb(81, 80, 246);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.actions .btn:hover, .actions .btn:active {
+  background-color: rgb(43, 43, 192);
+}
+.actions .btn .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+.actions .btn .icon svg {
+  width: 19px;
+  height: auto;
+}
+.actions .btn .text {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 16.5px;
+  margin-left: 5px;
+}
+
+.hidden {
+  display: none;
+}/*# sourceMappingURL=popup.css.map */
