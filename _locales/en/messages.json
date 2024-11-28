@@ -1,13 +1,13 @@
 {
     "appName": {
-        "message": "Math AI"
+        "message": "AI Math"
     },
     "appDesc": {
-        "message": "Simple ChatGPT Math solver"
+        "message": "Solve math problems effortlessly with AI Math Solver! Get step-by-step solutions powered by AI Math AI and ChatGPT. Perfect for math homework help and quick answers!"
     },
 
     "popup_title": {
-        "message": "Math AI Solver"
+        "message": "AI Math"
     },
     "popup_text": {
         "message": "AI Math is a ChatGPT-4 extension that solves math problems from screenshots instantly.<br><br>Choose the mode and make a screenshot."
@@ -26,7 +26,7 @@
     },
 
     "dialog_title": {
-        "message": "Math AI Solver"
+        "message": "AI Math"
     },
     "dialog_help_and_rate": {
         "message": "Help and rate us"
