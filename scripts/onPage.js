@@ -11,9 +11,8 @@ function openDialog(data = '') {
 
 onPageActions.set('openDialog', (request, sender, sendResponse) => {
     const data = request.details.data ? request.details.data : '';
-    console.log('onPage openDialog', data);
-
     openDialog(data);
+    sendResponse(true);
     return true;
 });
 

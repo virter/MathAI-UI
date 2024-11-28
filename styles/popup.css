@@ -14,6 +14,29 @@ button {
   border: unset;
 }
 
+.loader {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(19, 19, 19, 0.7);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+}
+.loader.show {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+
+.main-popup {
+  position: relative;
+}
 .main-popup .header {
   display: flex;
   justify-content: space-between;
@@ -44,6 +67,9 @@ button {
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+.main-popup .popup-body {
+  position: relative;
 }
 .main-popup .content {
   padding: 30px;
@@ -140,6 +166,9 @@ button {
 }
 .rate-block .star-row .star.hover svg path, .rate-block .star-row .star.active svg path {
   fill: rgb(255, 185, 33);
+}
+.rate-block .star-row .star.unhover svg path {
+  fill: #cfcfcf;
 }
 
 .upload-preview {

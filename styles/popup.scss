@@ -5,7 +5,7 @@
 }
 
 body {
-    margin: 0px!important;
+    margin: 0px !important;
     width: 370px;
 }
 
@@ -16,7 +16,30 @@ button {
     border: unset;
 }
 
+.loader {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(19, 19, 19, 0.7);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s 0s, visibility 0s .3s;
+
+    &.show {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity .3s 0s, visibility 0s 0s;
+    }
+}
+
 .main-popup {
+    position: relative;
+
     .header {
         display: flex;
         justify-content: space-between;
@@ -33,7 +56,7 @@ button {
                 width: 28px;
                 height: 28px;
             }
-    
+
             .title {
                 font-size: 18px;
                 color: $white-color;
@@ -52,6 +75,10 @@ button {
                 cursor: pointer;
             }
         }
+    }
+
+    .popup-body {
+        position: relative;
     }
 
     .content {
@@ -109,7 +136,7 @@ button {
         input[type=radio] {
             display: none;
 
-            &:checked ~ .radio-item {
+            &:checked~.radio-item {
                 background-color: $green1-color;
                 border-color: $green2-color;
 
@@ -118,7 +145,7 @@ button {
                         stroke: $green2-color;
                         transition: .3s;
                     }
-    
+
                     circle.inner {
                         stroke: $green2-color;
                         fill: $green2-color;
@@ -128,7 +155,7 @@ button {
             }
         }
 
-        & + label {
+        &+label {
             margin-top: 20px;
         }
     }
@@ -173,6 +200,14 @@ button {
                 svg {
                     path {
                         fill: $yellow1-color;
+                    }
+                }
+            }
+
+            &.unhover {
+                svg {
+                    path {
+                        fill: $grey1-color;
                     }
                 }
             }

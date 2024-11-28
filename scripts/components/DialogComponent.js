@@ -41,73 +41,13 @@ class DialogComponent {
 
         await this.initElements();
     }
-/*
-    async initLangDropdown() {
-        const store = await chrome.storage.local.get(['languageList', 'language']);
-        if (!('languageList' in store)) return;
 
-        const items = store.languageList.map(item => {
-            return {
-                name: item.name,
-                value: item.code
-            };
-        });
-
-        
-        this.customerRatingSelect = new SearchDropdown({
-            block: this.shadow.querySelector('[data-customer_rating_select]'),
-            items: [
-                { name: '1 star', value: '1_star' },
-                { name: '2 stars', value: '2_stars' },
-                { name: '3 stars', value: '3_stars' },
-                { name: '4 stars', value: '4_stars' },
-                { name: '5 stars', value: '5_stars' },
-            ],
-            active: 'none',
-        });
-
-        this.toneSelect = new SearchDropdown({
-            block: this.shadow.querySelector('[data-tone_select]'),
-            items: [
-                { name: 'friendly', value: 'friendly' },
-                { name: 'official', value: 'official' }
-            ],
-            active: 'classic',
-        });
-
-        this.lengthSelect = new SearchDropdown({
-            block: this.shadow.querySelector('[data-length_select]'),
-            items: [
-                { name: 'short', value: 'short' },
-                { name: 'medium', value: 'medium' },
-                { name: 'long', value: 'long' },
-            ],
-            active: 'classic',
-        });
-
-
-
-        const activeLanguage = 'language' in store ? store.language : null;
-
-        this.languageSelect = new SearchDropdown({
-            block: this.shadow.querySelector('[data-language_select]'),
-            items: items,
-            active: activeLanguage,
-            handlers: {
-                onChange: (data) => {
-                    chrome.runtime.sendMessage({
-                        action: 'setLanguage',
-                        language: data.value
-                    });
-                }
-            }
-        });
-    }
-*/
     async initElements() {
         this.dialog = this.shadow.querySelector('[data-dialog]');
         this.btnClose = this.shadow.querySelectorAll('[data-close_btn]');
+        this.copyBtn = this.shadow.querySelector('[data-copy_btn]');
         this.content = this.shadow.querySelector('[data-content]');
+        this.hiddenContent = this.shadow.querySelector('[data-hidden_content]');
 
         this.rateBlock = new RateBlock(
             this.shadow.querySelector('[data-rate_block]'),
@@ -127,6 +67,16 @@ class DialogComponent {
             element: this.btnClose,
             handler: (event) => {
                 this.hide();
+            }
+        });
+
+        this.eventService.add({
+            event: 'mousedown',
+            element: this.copyBtn,
+            handler: (event) => {
+                console.log('this.copyBtn');
+                debugger;
+                this.copyText();
             }
         });
     }
@@ -149,6 +99,7 @@ class DialogComponent {
         if (!this.initialData) return;
 
         this.content.innerHTML = '';
+        this.hiddenContent.innerHTML = data;
         this.content.insertAdjacentHTML('afterbegin', data);
         MathJax.typesetPromise([this.content]);
     }
@@ -166,6 +117,25 @@ class DialogComponent {
     reset() {
         this.resetProperties();
         this.hide();
+    }
+
+    copyText() {
+        /*
+        if (document.selection) {
+            const range = document.body.createTextRange();
+            range.moveToElementText(this.hiddenContent);
+            range.select().createTextRange();
+        } else if (window.getSelection) {
+            const range = document.createRange();
+            range.selectNode(this.hiddenContent);
+            window.getSelection().addRange(range);
+        }
+
+        document.execCommand('copy');
+        */
+
+        navigator.clipboard.writeText(this.hiddenContent.innerText);
+
     }
 }
 
@@ -193,11 +163,6 @@ math * {
   line-height: 30px !important;
 }
 
-math {
-    margin-top: 7px!important;
-    margin-bottom: 7px!important;
-}
-
 .mai_back {
   width: 100vw;
   height: 100vh;
@@ -214,7 +179,7 @@ math {
   border: unset;
 }
 .mai_back .dialog {
-  width: 370px;
+  width: 500px;
   background-color: #ffffff;
 }
 .mai_back .dialog .header {
@@ -250,6 +215,9 @@ math {
 }
 .mai_back .dialog .content-wrap {
   padding: 10px;
+}
+.mai_back .dialog .content-wrap .hidden-content {
+  display: none;
 }
 .mai_back .dialog .content-wrap .content {
   padding: 20px 20px;
@@ -321,6 +289,9 @@ math {
 }
 .mai_back .green-block .rate-block .star-row .star.hover svg path, .mai_back .green-block .rate-block .star-row .star.active svg path {
   fill: rgb(255, 185, 33);
+}
+.mai_back .green-block .rate-block .star-row .star.unhover svg path {
+  fill: #cfcfcf;
 }
 .mai_back .upload-preview {
   display: flex;
@@ -403,6 +374,7 @@ math {
         </div>
         <div class="content-wrap">
             <div class="content" data-content></div>
+            <div class="hidden-content" data-hidden_content></div>
         </div>
         <div class="green-block">
             <div class="left">
@@ -457,149 +429,5 @@ math {
         </div>
     </div>
 </div>`;
-        /*
-        <div class="arg_dialog" data-dialog>
-            <div class="arg_header">
-                <span>${chrome.i18n.getMessage('dialog_title')}</span>
-                <button class="arg_close" data-btn_close>
-                    <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1.00714L8.99286 0L5 3.99286L1.00714 0L0 1.00714L3.99286 5L0 8.99286L1.00714 10L5 6.00714L8.99286 10L10 8.99286L6.00714 5L10 1.00714Z" fill="#8288C3"/></svg>
-                </button>
-            </div>
-            <div class="arg_dialog-body">
-                <div class="arg_dialog-intro">${chrome.i18n.getMessage('intro_text')}</div>
-                <div class="arg_input-group arg_group-row">
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('customer_name')}<!--<div class="arg_requirement-label">*</div>--></div>
-                        <input class="arg_input arg_wide" placeholder="${chrome.i18n.getMessage('customer_name')}" data-prop="options" data-field="customer_name"/>
-                    </div>
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('customer_rating')}</div>
-                        <div class="arg_select arg_wide" data-customer_rating_select>
-                            <input type="text" class="arg_select-input" placeholder="${chrome.i18n.getMessage('customer_rating')}" data-dropdown_input data-prop="options" data-field="customer_rating" />
-                            <div class="arg_select-list" data-dropdown_block>
-                                <div class="arg_item-active hidden" data-active_item>
-                                    <span data-active_item_label></span>
-                                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4.99664L5.99999 12.9966L2.33333 9.32997L3.27333 8.38997L5.99999 11.11L13.06 4.05664L14 4.99664Z" fill="#00C94C"/></svg>
-                                </div>
-                                <div class="arg_list-body" data-dropdown_list></div>
-                            </div>
-                            <div class="arg_select-arrow">
-                                <svg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4.71609 5.37622L9.04622 0.126221H0.385968L4.71609 5.37622Z' fill='#C4CBEB'/></svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="arg_input-group arg_group-row">
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('text_language')}<div class="arg_requirement-label">*</div></div>
-                        <div class="arg_select arg_wide" data-language_select>
-                            <input type="text" class="arg_select-input" placeholder="${chrome.i18n.getMessage('language')}" data-dropdown_input data-prop="options" data-field="lang" />
-                            <div class="arg_select-list" data-dropdown_block>
-                                <div class="arg_item-active hidden" data-active_item>
-                                    <span data-active_item_label></span>
-                                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4.99664L5.99999 12.9966L2.33333 9.32997L3.27333 8.38997L5.99999 11.11L13.06 4.05664L14 4.99664Z" fill="#00C94C"/></svg>
-                                </div>
-                                <div class="arg_list-body" data-dropdown_list></div>
-                            </div>
-                            <div class="arg_select-arrow">
-                                <svg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4.71609 5.37622L9.04622 0.126221H0.385968L4.71609 5.37622Z' fill='#C4CBEB'/></svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('tone')}<div class="arg_requirement-label">*</div></div>
-                        <div class="arg_select arg_wide" data-tone_select>
-                            <input type="text" class="arg_select-input" placeholder="${chrome.i18n.getMessage('tone')}" data-dropdown_input data-prop="options" data-field="tone" />
-                            <div class="arg_select-list" data-dropdown_block>
-                                <div class="arg_item-active hidden" data-active_item>
-                                    <span data-active_item_label></span>
-                                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4.99664L5.99999 12.9966L2.33333 9.32997L3.27333 8.38997L5.99999 11.11L13.06 4.05664L14 4.99664Z" fill="#00C94C"/></svg>
-                                </div>
-                                <div class="arg_list-body" data-dropdown_list></div>
-                            </div>
-                            <div class="arg_select-arrow">
-                                <svg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4.71609 5.37622L9.04622 0.126221H0.385968L4.71609 5.37622Z' fill='#C4CBEB'/></svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="arg_input-group arg_group-row">
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('length')}<div class="arg_requirement-label">*</div></div>
-                        <div class="arg_select arg_wide" data-length_select>
-                            <input type="text" class="arg_select-input" placeholder="${chrome.i18n.getMessage('length')}" data-dropdown_input data-prop="options" data-field="text_length" />
-                            <div class="arg_select-list" data-dropdown_block>
-                                <div class="arg_item-active hidden" data-active_item>
-                                    <span data-active_item_label></span>
-                                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4.99664L5.99999 12.9966L2.33333 9.32997L3.27333 8.38997L5.99999 11.11L13.06 4.05664L14 4.99664Z" fill="#00C94C"/></svg>
-                                </div>
-                                <div class="arg_list-body" data-dropdown_list></div>
-                            </div>
-                            <div class="arg_select-arrow">
-                                <svg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4.71609 5.37622L9.04622 0.126221H0.385968L4.71609 5.37622Z' fill='#C4CBEB'/></svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('keywords')}</div>
-                        <input class="arg_input arg_wide" placeholder="${chrome.i18n.getMessage('keywords_placeholder')}" data-prop="options" data-field="keywords"/>
-                    </div>
-                </div>
-                <div class="arg_input-group arg_group-row">
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('optional_details')}</div>
-                        <input class="arg_input arg_wide" placeholder="${chrome.i18n.getMessage('optional_details_placeholder')}" data-prop="options" data-field="optional_details"/>
-                    </div>
-                    <div class="arg_row-cell">
-                        <div class="arg_label">${chrome.i18n.getMessage('details_about_bussiness')}</div>
-                        <input class="arg_input arg_wide" placeholder="${chrome.i18n.getMessage('details_about_bussiness_placeholder')}" data-prop="options" data-field="details_about_bussiness"/>
-                    </div>
-                </div>
-                <div class="arg_input-group arg_wide">
-                    <div class="arg_label">${chrome.i18n.getMessage('user_review_text')}</div>
-                    <textarea class="arg_textarea arg_textarea-description arg_scrollbar" placeholder="${chrome.i18n.getMessage('user_review_text')}" data-prop="options" data-field="user_review_text"></textarea>
-                </div>
-                <div class="arg_input-group small-top-margin">
-                    <button class="arg_action-btn arg_send-btn" data-send_btn>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2841_2)"><path d="M5.00012 3.73337L3.33346 4.66671L4.26679 3.00004L3.33346 1.33337L5.00012 2.26671L6.66679 1.33337L5.73346 3.00004L6.66679 4.66671L5.00012 3.73337ZM13.0001 10.2667L14.6668 9.33337L13.7335 11L14.6668 12.6667L13.0001 11.7334L11.3335 12.6667L12.2668 11L11.3335 9.33337L13.0001 10.2667ZM14.6668 1.33337L13.7335 3.00004L14.6668 4.66671L13.0001 3.73337L11.3335 4.66671L12.2668 3.00004L11.3335 1.33337L13.0001 2.26671L14.6668 1.33337ZM8.89346 8.52004L10.5201 6.89337L9.10679 5.48004L7.48012 7.10671L8.89346 8.52004ZM9.58012 4.86004L11.1401 6.42004C11.4001 6.66671 11.4001 7.10004 11.1401 7.36004L3.36012 15.14C3.10012 15.4 2.66679 15.4 2.42012 15.14L0.860123 13.58C0.600123 13.3334 0.600123 12.9 0.860123 12.64L8.64012 4.86004C8.90012 4.60004 9.33346 4.60004 9.58012 4.86004Z" fill="white"></path></g><defs><clipPath id="clip0_2841_2"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
-                        <span>${chrome.i18n.getMessage('generate_response')}</span>
-                    </button>
-                </div>
-                <div class="arg_submit-description" data-send_description>${chrome.i18n.getMessage('send_description')}</div>
-
-                <div class="arg_input-group arg_wide arg_result-group">
-                    <div class="arg_label">${chrome.i18n.getMessage('ai_response')}</div>
-                    <div class="arg_result-text arg_scrollbar" data-result_text></div>
-                    <div class="arg_highlight-text arg_scrollbar" data-highlight_text></div>
-                    <div class="arg_rate-line hidden" data-rate_line>
-                        <span>${chrome.i18n.getMessage('like_extension')}</span>
-                        <div class="arg_rate-block" data-rate_block>
-                            <button class="arg_rate-star" data-rate_star="1"></button>
-                            <button class="arg_rate-star" data-rate_star="2"></button>
-                            <button class="arg_rate-star" data-rate_star="3"></button>
-                            <button class="arg_rate-star" data-rate_star="4"></button>
-                            <button class="arg_rate-star" data-rate_star="5"></button>
-                        </div>
-                    </div>
-                    <div class="arg_result-controls">
-                        <div class="arg_tip-wrap">
-                            <button class="arg_action-btn arg_green-btn arg_copy-btn" data-copy_btn>
-                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.6667 14.5286H5.33334V5.19531H12.6667M12.6667 3.86198H5.33334C4.97971 3.86198 4.64058 4.00245 4.39053 4.2525C4.14048 4.50255 4 4.84169 4 5.19531V14.5286C4 14.8823 4.14048 15.2214 4.39053 15.4715C4.64058 15.7215 4.97971 15.862 5.33334 15.862H12.6667C13.0203 15.862 13.3594 15.7215 13.6095 15.4715C13.8595 15.2214 14 14.8823 14 14.5286V5.19531C14 4.84169 13.8595 4.50255 13.6095 4.2525C13.3594 4.00245 13.0203 3.86198 12.6667 3.86198ZM10.6667 1.19531H2.66667C2.31305 1.19531 1.97391 1.33579 1.72386 1.58584C1.47381 1.83589 1.33334 2.17502 1.33334 2.52865V11.862H2.66667V2.52865H10.6667V1.19531Z" fill="white"/></svg>                    
-                                <span>${chrome.i18n.getMessage('copy_text')}</span>
-                            </button>
-                            <div class="arg_copy-tip" data-copy_tip>${chrome.i18n.getMessage('text_coppied')}</div>
-                        </div>
-                        <!--
-                        <button class="arg_outline-btn" data-highlight_btn>
-                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2839_137)"><path d="M1.14519 8.23808H3.14519V9.57141H1.14519V8.23808ZM13.2119 3.23808L11.8119 4.63808L12.7452 5.57141L14.1452 4.17141L13.2119 3.23808ZM7.81185 1.57141H9.14519V3.57141H7.81185V1.57141ZM3.74519 3.23808L2.81185 4.17141L4.21185 5.57141L5.14519 4.63808L3.74519 3.23808ZM7.14519 15.5714C7.14519 15.9714 7.41185 16.2381 7.81185 16.2381H9.14519C9.54519 16.2381 9.81185 15.9714 9.81185 15.5714V14.9047H7.14519V15.5714ZM8.47852 4.90474C6.27852 4.90474 4.47852 6.70474 4.47852 8.90474C4.47852 10.3714 5.27852 11.7047 6.47852 12.3714V13.5714C6.47852 13.9714 6.74519 14.2381 7.14519 14.2381H9.81185C10.2119 14.2381 10.4785 13.9714 10.4785 13.5714V12.3714C11.6785 11.7047 12.4785 10.3714 12.4785 8.90474C12.4785 6.70474 10.6785 4.90474 8.47852 4.90474ZM9.14519 11.5047V12.2381H7.81185V11.5047C6.67852 11.2381 5.81185 10.1714 5.81185 8.90474C5.81185 7.43808 7.01185 6.23808 8.47852 6.23808C9.94519 6.23808 11.1452 7.43808 11.1452 8.90474C11.1452 10.1714 10.2785 11.1714 9.14519 11.5047ZM13.8119 8.23808H15.8119V9.57141H13.8119V8.23808Z" fill="#9297CA"/></g><defs><clipPath id="clip0_2839_137"><rect width="16" height="16" fill="white" transform="translate(0.478516 0.904785)"/></clipPath></defs></svg>                        
-                            <span>${chrome.i18n.getMessage('highlight_changes')}</span>
-                        </button>
-                        -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-    */
     }
 }

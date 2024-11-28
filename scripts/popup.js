@@ -1,3 +1,20 @@
+class Loader {
+    constructor(block) {
+        if (!block) return;
+        this.block = block;
+    }
+
+    show() {
+        this.block.classList.add('show');
+    }
+
+    hide() {
+        this.block.classList.remove('show');
+    }
+}
+
+const popupLoader = new Loader(document.querySelector('[data-loader]'));
+
 function localize() {
     const localizeList = document.querySelectorAll('[data-localize]');
     for (let item of localizeList) {
@@ -7,8 +24,6 @@ function localize() {
 }
 
 async function openDialog(data) {
-    console.log('popup openDialog', data);
-
     chrome.tabs.query(
         {
             currentWindow: true,
@@ -94,10 +109,16 @@ function initUploadBtn() {
         if (!mode) return;
 
         try {
+            popupLoader.show();
+
             const result = await sendRequest(file, mode);
             this.smartOpenDialog(result.data);
+            window.close();
+
+            popupLoader.hide();
             console.log('request', result);
         } catch (error) {
+            popupLoader.hide();
             console.log(error);
         }
     });

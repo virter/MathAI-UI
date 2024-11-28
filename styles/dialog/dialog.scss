@@ -37,7 +37,7 @@ math * {
     }
 
     .dialog {
-        width: 370px;
+        width: 500px;
         background-color: $white-color;
 
         .header {
@@ -79,6 +79,10 @@ math * {
 
         .content-wrap {
             padding: 10px;
+
+            .hidden-content {
+                display: none;
+            }
 
             .content {
                 padding: 20px 20px;
@@ -165,6 +169,14 @@ math * {
                         svg {
                             path {
                                 fill: $yellow1-color;
+                            }
+                        }
+                    }
+
+                    &.unhover {
+                        svg {
+                            path {
+                                fill: $grey1-color;
                             }
                         }
                     }

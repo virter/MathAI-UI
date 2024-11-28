@@ -34,7 +34,7 @@ math * {
   border: unset;
 }
 .mai_back .dialog {
-  width: 370px;
+  width: 500px;
   background-color: #ffffff;
 }
 .mai_back .dialog .header {
@@ -70,6 +70,9 @@ math * {
 }
 .mai_back .dialog .content-wrap {
   padding: 10px;
+}
+.mai_back .dialog .content-wrap .hidden-content {
+  display: none;
 }
 .mai_back .dialog .content-wrap .content {
   padding: 20px 20px;
@@ -141,6 +144,9 @@ math * {
 }
 .mai_back .green-block .rate-block .star-row .star.hover svg path, .mai_back .green-block .rate-block .star-row .star.active svg path {
   fill: rgb(255, 185, 33);
+}
+.mai_back .green-block .rate-block .star-row .star.unhover svg path {
+  fill: #cfcfcf;
 }
 .mai_back .upload-preview {
   display: flex;
