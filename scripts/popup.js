@@ -146,7 +146,7 @@ async function init() {
         },
         () => {
             // PAGE FEEDBACK
-            openPage('https://chrome.google.com/webstore/detail/ai-essay-writer/blcamfmkmjdbigcliokaebahmolamlfp/reviews');
+            openPage('https://chrome.google.com/webstore/detail/ai-math/madagoalbkmkbcgfocmiiabjfccnggpf/reviews');
         }
     );
 
