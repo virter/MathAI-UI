@@ -2,7 +2,7 @@
     "name": "__MSG_appName__",
     "description": "__MSG_appDesc__",
     "default_locale": "en",
-    "version": "1.1.8",
+    "version": "1.0.1",
     "manifest_version": 3,
     "icons": {
         "260": "icon-default.png"
@@ -15,7 +15,7 @@
         "default_icon": {
             "260": "icon-default.png"
         },
-        "default_title": "Simple Essay Writer",
+        "default_title": "AI Math",
         "default_popup": "popup.html"
     },
     "web_accessible_resources": [
