@@ -4,7 +4,7 @@ function openPage(url) {
 
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        openPage('https://youtube.com');
+        openPage('https://ai-math.pro/how-to-start/');
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         // When extension is updated
     } else if (details.reason === chrome.runtime.OnInstalledReason.CHROME_UPDATE) {
