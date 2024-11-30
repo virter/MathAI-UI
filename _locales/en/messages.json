@@ -24,6 +24,9 @@
     "popup_upload_btn": {
         "message": "Upload picture"
     },
+    "popup_internal_error": {
+        "message": "An error occurred. Please try again."
+    },
 
     "dialog_title": {
         "message": "AI Math"

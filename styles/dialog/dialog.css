@@ -68,6 +68,9 @@ math * {
   height: 24px;
   cursor: pointer;
 }
+.mai_back .dialog .dialog-body {
+  position: relative;
+}
 .mai_back .dialog .content-wrap {
   padding: 10px;
 }
@@ -163,9 +166,20 @@ math * {
 }
 .mai_back .actions {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 15px 30px;
+}
+.mai_back .actions .response-error {
+  display: none;
+  font-size: 16px;
+  line-height: 18.5px;
+  color: #ef5350;
+  margin-bottom: 10px;
+}
+.mai_back .actions .response-error.show {
+  display: block;
 }
 .mai_back .btn {
   display: flex;
@@ -202,6 +216,26 @@ math * {
 }
 .mai_back .btn.copy-btn:hover, .mai_back .btn.copy-btn:active {
   background-color: rgb(17, 140, 76);
+}
+
+.loader {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(19, 19, 19, 0.7);
+  visibility: hidden !important;
+  opacity: 0;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+}
+.loader.show {
+  visibility: visible !important;
+  opacity: 1;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
 }
 
 .hidden {

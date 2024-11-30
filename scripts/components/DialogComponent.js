@@ -4,8 +4,9 @@ function openPage(url) {
 
 class DialogComponent {
     constructor() {
-        this.tagName = 'sew-dialog';
+        this.tagName = 'mai-dialog';
 
+        this.mode = '';
         this.template = new DialogTemplate();
         this.eventService = new EventService();
 
@@ -48,6 +49,11 @@ class DialogComponent {
         this.copyBtn = this.shadow.querySelector('[data-copy_btn]');
         this.content = this.shadow.querySelector('[data-content]');
         this.hiddenContent = this.shadow.querySelector('[data-hidden_content]');
+        this.uploadBtn = this.shadow.querySelector('[data-upload_btn]');
+        this.fileInput = this.shadow.querySelector('[data-upload_file]');
+
+        this.loader = new Loader(this.shadow.querySelector('[data-loader]'));
+        this.responseError = new ResponseError(this.shadow.querySelector('[data-response_error]'));
 
         this.rateBlock = new RateBlock(
             this.shadow.querySelector('[data-rate_block]'),
@@ -74,9 +80,23 @@ class DialogComponent {
             event: 'mousedown',
             element: this.copyBtn,
             handler: (event) => {
-                console.log('this.copyBtn');
-                debugger;
                 this.copyText();
+            }
+        });
+
+        this.eventService.add({
+            event: 'mousedown',
+            element: this.uploadBtn,
+            handler: (event) => {
+                this.fileInput.click();
+            }
+        });
+
+        this.eventService.add({
+            event: 'change',
+            element: this.fileInput,
+            handler: (event) => {
+                this.onFileChange();
             }
         });
     }
@@ -104,9 +124,10 @@ class DialogComponent {
         MathJax.typesetPromise([this.content]);
     }
 
-    show(data) {
+    show(data, mode = 'step_by_step') {
         this.resetProperties();
         this.initContent(data);
+        this.mode = mode;
         this.wrapper.style.transform = 'unset';
     }
 
@@ -120,22 +141,51 @@ class DialogComponent {
     }
 
     copyText() {
-        /*
-        if (document.selection) {
-            const range = document.body.createTextRange();
-            range.moveToElementText(this.hiddenContent);
-            range.select().createTextRange();
-        } else if (window.getSelection) {
-            const range = document.createRange();
-            range.selectNode(this.hiddenContent);
-            window.getSelection().addRange(range);
-        }
-
-        document.execCommand('copy');
-        */
-
         navigator.clipboard.writeText(this.hiddenContent.innerText);
+    }
 
+    async sendRequest(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('options[mode]', this.mode);
+
+        const response = await fetch('https://aiwordchecker.online/api/math', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to upload file');
+        }
+    
+        const result = await response.json();
+        return result;
+    }
+
+    clearFileInput() {
+        this.fileInput.value = '';
+    }
+
+    async onFileChange() {
+        const [file] = this.fileInput.files;
+        if (!file) return;
+
+        this.loader.show();
+        this.responseError.hide();
+
+        try {
+            const result = await this.sendRequest(file);
+            this.clearFileInput();
+            this.initContent(result.data);
+            console.log('request', result);
+
+            this.loader.hide();
+        } catch (error) {
+            console.log(error);
+
+            this.loader.hide();
+            this.responseError.show();
+        }
     }
 }
 
@@ -169,7 +219,7 @@ math * {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(19, 19, 19, 0.7);
+  background-color: rgba(19, 19, 19, 0.9);
   overflow-y: auto;
 }
 .mai_back button {
@@ -212,6 +262,9 @@ math * {
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+.mai_back .dialog .dialog-body {
+  position: relative;
 }
 .mai_back .dialog .content-wrap {
   padding: 10px;
@@ -308,9 +361,20 @@ math * {
 }
 .mai_back .actions {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 15px 30px;
+}
+.mai_back .actions .response-error {
+  display: none;
+  font-size: 16px;
+  line-height: 18.5px;
+  color: #ef5350;
+  margin-bottom: 10px;
+}
+.mai_back .actions .response-error.show {
+  display: block;
 }
 .mai_back .btn {
   display: flex;
@@ -349,6 +413,26 @@ math * {
   background-color: rgb(17, 140, 76);
 }
 
+.loader {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(19, 19, 19, 0.7);
+  visibility: hidden !important;
+  opacity: 0;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+}
+.loader.show {
+  visibility: visible !important;
+  opacity: 1;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+
 .hidden {
   display: none;
 }`;
@@ -372,60 +456,69 @@ math * {
                 </button>
             </div>
         </div>
-        <div class="content-wrap">
-            <div class="content" data-content></div>
-            <div class="hidden-content" data-hidden_content></div>
-        </div>
-        <div class="green-block">
-            <div class="left">
+        <div class="dialog-body">
+            <div class="content-wrap">
+                <div class="content" data-content></div>
+                <div class="hidden-content" data-hidden_content></div>
+            </div>
+            <div class="green-block">
+                <div class="left">
+                    <button
+                        type="button"
+                        class="btn copy-btn"
+                        data-copy_btn
+                    >
+                        <div class="icon">
+                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.05775 17.9864C8.55258 17.9864 8.125 17.8114 7.775 17.4614C7.425 17.1114 7.25 16.6838 7.25 16.1786V4.79414C7.25 4.28897 7.425 3.86139 7.775 3.51139C8.125 3.16139 8.55258 2.98639 9.05775 2.98639H17.4423C17.9474 2.98639 18.375 3.16139 18.725 3.51139C19.075 3.86139 19.25 4.28897 19.25 4.79414V16.1786C19.25 16.6838 19.075 17.1114 18.725 17.4614C18.375 17.8114 17.9474 17.9864 17.4423 17.9864H9.05775ZM9.05775 16.4864H17.4423C17.5192 16.4864 17.5898 16.4543 17.6538 16.3901C17.7179 16.3261 17.75 16.2556 17.75 16.1786V4.79414C17.75 4.71714 17.7179 4.64664 17.6538 4.58264C17.5898 4.51847 17.5192 4.48639 17.4423 4.48639H9.05775C8.98075 4.48639 8.91025 4.51847 8.84625 4.58264C8.78208 4.64664 8.75 4.71714 8.75 4.79414V16.1786C8.75 16.2556 8.78208 16.3261 8.84625 16.3901C8.91025 16.4543 8.98075 16.4864 9.05775 16.4864ZM5.55775 21.4864C5.05258 21.4864 4.625 21.3114 4.275 20.9614C3.925 20.6114 3.75 20.1838 3.75 19.6786V6.79414H5.25V19.6786C5.25 19.7556 5.28208 19.8261 5.34625 19.8901C5.41025 19.9543 5.48075 19.9864 5.55775 19.9864H15.4423V21.4864H5.55775Z" fill="white"/></svg>
+                        </div>
+                        <div class="text">${chrome.i18n.getMessage('dialog_copy_btn')}</div>
+                    </button>
+                </div>
+                <div class="rate-block" data-rate_block>
+                    <div class="text">${chrome.i18n.getMessage('dialog_help_and_rate')}</div>
+                    <div class="star-row">
+                        <div class="star" data-rate_star="1">
+                            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
+                        </div>
+                        <div class="star" data-rate_star="2">
+                            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
+                        </div>
+                        <div class="star" data-rate_star="3">
+                            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
+                        </div>
+                        <div class="star" data-rate_star="4">
+                            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
+                        </div>
+                        <div class="star" data-rate_star="5">
+                            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <input
+                    type="file"
+                    class="hidden"
+                    data-upload_file
+                />
+                <div
+                    class="response-error"
+                    data-response_error
+                >${chrome.i18n.getMessage('dialog_internal_error')}</div>
                 <button
                     type="button"
-                    class="btn copy-btn"
-                    data-copy_btn
+                    class="btn upload-btn"
+                    data-upload_btn
                 >
                     <div class="icon">
-                        <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.05775 17.9864C8.55258 17.9864 8.125 17.8114 7.775 17.4614C7.425 17.1114 7.25 16.6838 7.25 16.1786V4.79414C7.25 4.28897 7.425 3.86139 7.775 3.51139C8.125 3.16139 8.55258 2.98639 9.05775 2.98639H17.4423C17.9474 2.98639 18.375 3.16139 18.725 3.51139C19.075 3.86139 19.25 4.28897 19.25 4.79414V16.1786C19.25 16.6838 19.075 17.1114 18.725 17.4614C18.375 17.8114 17.9474 17.9864 17.4423 17.9864H9.05775ZM9.05775 16.4864H17.4423C17.5192 16.4864 17.5898 16.4543 17.6538 16.3901C17.7179 16.3261 17.75 16.2556 17.75 16.1786V4.79414C17.75 4.71714 17.7179 4.64664 17.6538 4.58264C17.5898 4.51847 17.5192 4.48639 17.4423 4.48639H9.05775C8.98075 4.48639 8.91025 4.51847 8.84625 4.58264C8.78208 4.64664 8.75 4.71714 8.75 4.79414V16.1786C8.75 16.2556 8.78208 16.3261 8.84625 16.3901C8.91025 16.4543 8.98075 16.4864 9.05775 16.4864ZM5.55775 21.4864C5.05258 21.4864 4.625 21.3114 4.275 20.9614C3.925 20.6114 3.75 20.1838 3.75 19.6786V6.79414H5.25V19.6786C5.25 19.7556 5.28208 19.8261 5.34625 19.8901C5.41025 19.9543 5.48075 19.9864 5.55775 19.9864H15.4423V21.4864H5.55775Z" fill="white"/></svg>
+                        <svg width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.35575 12.3118C4.73175 12.3118 3.34983 11.7467 2.21 10.6165C1.07 9.48652 0.5 8.11094 0.5 6.48977C0.5 4.8686 1.07 3.49135 2.21 2.35802C3.34983 1.22469 4.73175 0.65802 6.35575 0.65802H15.3462C16.5001 0.65802 17.4808 1.05869 18.2885 1.86002C19.0962 2.66119 19.5 3.63869 19.5 4.79252C19.5 5.94635 19.0962 6.92394 18.2885 7.72527C17.4808 8.5266 16.5001 8.92727 15.3462 8.92727H6.8365C6.15967 8.92727 5.58183 8.69144 5.103 8.21977C4.62417 7.74827 4.38475 7.1736 4.38475 6.49577C4.38475 5.81794 4.6225 5.2396 5.098 4.76077C5.5735 4.28194 6.153 4.04252 6.8365 4.04252H15.6152V5.54252H6.8365C6.5685 5.54252 6.34283 5.6326 6.1595 5.81277C5.97617 5.99294 5.8845 6.21694 5.8845 6.48477C5.8845 6.75277 5.97617 6.97685 6.1595 7.15702C6.34283 7.33719 6.5685 7.42727 6.8365 7.42727H15.3558C16.0942 7.41694 16.7196 7.16044 17.2318 6.65777C17.7439 6.1551 18 5.53335 18 4.79252C18 4.05485 17.7423 3.43135 17.227 2.92202C16.7115 2.41269 16.0846 2.15802 15.3462 2.15802H6.35575C5.14675 2.14769 4.11858 2.5656 3.27125 3.41177C2.42375 4.25794 2 5.2851 2 6.49327C2 7.68427 2.42375 8.69669 3.27125 9.53052C4.11858 10.3642 5.14675 10.7913 6.35575 10.8118H15.6152V12.3118H6.35575Z" fill="#ffffff"/></svg>
                     </div>
-                    <div class="text">${chrome.i18n.getMessage('dialog_copy_btn')}</div>
+                    <div class="text">${chrome.i18n.getMessage('dialog_upload_btn')}</div>
                 </button>
             </div>
-            <div class="rate-block" data-rate_block>
-                <div class="text">${chrome.i18n.getMessage('dialog_help_and_rate')}</div>
-                <div class="star-row">
-                    <div class="star" data-rate_star="1">
-                        <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
-                    </div>
-                    <div class="star" data-rate_star="2">
-                        <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
-                    </div>
-                    <div class="star" data-rate_star="3">
-                        <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
-                    </div>
-                    <div class="star" data-rate_star="4">
-                        <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
-                    </div>
-                    <div class="star" data-rate_star="5">
-                        <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.04172 0.816923C8.40853 0.0736769 9.46838 0.0736789 9.83519 0.816924L11.7333 4.66287C11.8789 4.95802 12.1605 5.16259 12.4862 5.20992L16.7305 5.82664C17.5507 5.94583 17.8782 6.9538 17.2847 7.53234L14.2135 10.526C13.9778 10.7557 13.8703 11.0867 13.9259 11.4111L14.6509 15.6382C14.791 16.4551 13.9336 17.0781 13.2 16.6924L9.40379 14.6966C9.11247 14.5435 8.76444 14.5435 8.47311 14.6966L4.67693 16.6924C3.9433 17.0781 3.08587 16.4551 3.22598 15.6382L3.95099 11.4111C4.00663 11.0867 3.89908 10.7557 3.66339 10.526L0.592218 7.53233C-0.00129926 6.9538 0.326212 5.94583 1.14643 5.82664L5.39069 5.20992C5.7164 5.16259 5.99796 4.95802 6.14363 4.66287L8.04172 0.816923Z"/></svg>
-                    </div>
-                </div>
+            <div class="loader" data-loader>
+                <svg xmlns="http://www.w3.org/2000/svg" width="80px" height="80px" viewBox="0 0 24 24"><g><rect width="2" height="5" x="11" y="1" fill="#ffffff" opacity="0.14"/><rect width="2" height="5" x="11" y="1" fill="#ffffff" opacity="0.29" transform="rotate(30 12 12)"/><rect width="2" height="5" x="11" y="1" fill="#ffffff" opacity="0.43" transform="rotate(60 12 12)"/><rect width="2" height="5" x="11" y="1" fill="#ffffff" opacity="0.57" transform="rotate(90 12 12)"/><rect width="2" height="5" x="11" y="1" fill="#ffffff" opacity="0.71" transform="rotate(120 12 12)"/><rect width="2" height="5" x="11" y="1" fill="#ffffff" opacity="0.86" transform="rotate(150 12 12)"/><rect width="2" height="5" x="11" y="1" fill="#ffffff" transform="rotate(180 12 12)"/><animateTransform attributeName="transform" calcMode="discrete" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12"/></g></svg>
             </div>
-        </div>
-        <div class="actions">
-            <input
-                type="file"
-                class="hidden"
-                data-upload_file
-            />
-            <button
-                type="button"
-                class="btn upload-btn"
-                data-upload_btn
-            >
-                <div class="icon">
-                    <svg width="20" height="13" viewBox="0 0 20 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.35575 12.3118C4.73175 12.3118 3.34983 11.7467 2.21 10.6165C1.07 9.48652 0.5 8.11094 0.5 6.48977C0.5 4.8686 1.07 3.49135 2.21 2.35802C3.34983 1.22469 4.73175 0.65802 6.35575 0.65802H15.3462C16.5001 0.65802 17.4808 1.05869 18.2885 1.86002C19.0962 2.66119 19.5 3.63869 19.5 4.79252C19.5 5.94635 19.0962 6.92394 18.2885 7.72527C17.4808 8.5266 16.5001 8.92727 15.3462 8.92727H6.8365C6.15967 8.92727 5.58183 8.69144 5.103 8.21977C4.62417 7.74827 4.38475 7.1736 4.38475 6.49577C4.38475 5.81794 4.6225 5.2396 5.098 4.76077C5.5735 4.28194 6.153 4.04252 6.8365 4.04252H15.6152V5.54252H6.8365C6.5685 5.54252 6.34283 5.6326 6.1595 5.81277C5.97617 5.99294 5.8845 6.21694 5.8845 6.48477C5.8845 6.75277 5.97617 6.97685 6.1595 7.15702C6.34283 7.33719 6.5685 7.42727 6.8365 7.42727H15.3558C16.0942 7.41694 16.7196 7.16044 17.2318 6.65777C17.7439 6.1551 18 5.53335 18 4.79252C18 4.05485 17.7423 3.43135 17.227 2.92202C16.7115 2.41269 16.0846 2.15802 15.3462 2.15802H6.35575C5.14675 2.14769 4.11858 2.5656 3.27125 3.41177C2.42375 4.25794 2 5.2851 2 6.49327C2 7.68427 2.42375 8.69669 3.27125 9.53052C4.11858 10.3642 5.14675 10.7913 6.35575 10.8118H15.6152V12.3118H6.35575Z" fill="#ffffff"/></svg>
-                </div>
-                <div class="text">${chrome.i18n.getMessage('dialog_upload_btn')}</div>
-            </button>
         </div>
     </div>
 </div>`;

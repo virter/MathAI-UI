@@ -1,19 +1,5 @@
-class Loader {
-    constructor(block) {
-        if (!block) return;
-        this.block = block;
-    }
-
-    show() {
-        this.block.classList.add('show');
-    }
-
-    hide() {
-        this.block.classList.remove('show');
-    }
-}
-
 const popupLoader = new Loader(document.querySelector('[data-loader]'));
+const responseError = new ResponseError(document.querySelector('[data-response_error]'));
 
 function localize() {
     const localizeList = document.querySelectorAll('[data-localize]');
@@ -23,7 +9,7 @@ function localize() {
     }
 }
 
-async function openDialog(data) {
+async function openDialog(data, mode) {
     chrome.tabs.query(
         {
             currentWindow: true,
@@ -34,7 +20,8 @@ async function openDialog(data) {
             await chrome.tabs.sendMessage(tab.id, {
                 action: 'openDialog',
                 details: {
-                    data: data
+                    data: data,
+                    mode: mode
                 }
             });
         }
@@ -47,7 +34,7 @@ const redirectUrlList = [
     'chromewebstore.google.com'
 ];
 
-function smartOpenDialog(data) {
+function smartOpenDialog(data, mode) {
     chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
         /*
         const url = tabs[0].url;
@@ -63,7 +50,7 @@ function smartOpenDialog(data) {
         }
         */
 
-        openDialog(data);
+        openDialog(data, mode);
         return true;
     });
 }
@@ -71,7 +58,7 @@ function smartOpenDialog(data) {
 async function sendRequest(file, mode) {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('mode', mode);
+    formData.append('options[mode]', mode);
 
 
     const response = await fetch('https://aiwordchecker.online/api/math', {
@@ -92,6 +79,11 @@ function getMode() {
     return radio.value;
 }
 
+function clearFileInput() {
+    const fileInput = document.querySelector('[data-upload_file]');
+    fileInput.value = '';
+}
+
 function initUploadBtn() {
     const btn = document.querySelector('[data-upload_btn]');
     const fileInput = document.querySelector('[data-upload_file]');
@@ -108,18 +100,23 @@ function initUploadBtn() {
         const mode = getMode();
         if (!mode) return;
 
-        try {
-            popupLoader.show();
+        popupLoader.show();
+        responseError.hide();
 
+        try {
             const result = await sendRequest(file, mode);
-            this.smartOpenDialog(result.data);
+            clearFileInput();
+            this.smartOpenDialog(result.data, mode);
             window.close();
 
-            popupLoader.hide();
             console.log('request', result);
-        } catch (error) {
+
             popupLoader.hide();
+        } catch (error) {
             console.log(error);
+
+            popupLoader.hide();
+            responseError.show();
         }
     });
 }

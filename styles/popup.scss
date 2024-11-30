@@ -77,7 +77,7 @@ button {
         }
     }
 
-    .popup-body {
+    .dialog-body {
         position: relative;
     }
 
@@ -231,6 +231,7 @@ button {
 
 .actions {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 15px 30px;
@@ -268,6 +269,18 @@ button {
             font-size: 14px;
             line-height: 16.5px;
             margin-left: 5px;
+        }
+    }
+
+    .response-error {
+        display: none;
+        font-size: 16px;
+        line-height: 18.5px;
+        color: $error-red1-color;
+        margin-bottom: 10px;
+
+        &.show {
+            display: block;
         }
     }
 }

@@ -2,7 +2,7 @@
     "name": "__MSG_appName__",
     "description": "__MSG_appDesc__",
     "default_locale": "en",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "manifest_version": 3,
     "icons": {
         "260": "icon-default.png"
@@ -45,7 +45,9 @@
             "js": [
                 "scripts/vendors/webcomponents-bundle.js",
                 "scripts/vendors/mathjax-3.2.2.js",
+                "scripts/common/Loader.js",
                 "scripts/common/RateBlock.js",
+                "scripts/common/ResponseError.js",
                 "scripts/common/SearchDropdown.js",
                 "scripts/components/DialogComponent.js",
                 "scripts/services/EventService.js",

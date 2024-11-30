@@ -24,7 +24,7 @@
                 </button>
             </div>
         </div>
-        <div class="popup-body">
+        <div class="dialog-body">
             <div class="content-wrap">
                 <div class="content">
                     <div class="description" data-localize="popup_text"></div>
@@ -72,6 +72,11 @@
                     class="hidden"
                     data-upload_file
                 />
+                <div
+                    class="response-error"
+                    data-localize="popup_internal_error"
+                    data-response_error
+                ></div>
                 <button
                     type="button"
                     class="btn upload-btn"
@@ -99,7 +104,8 @@
     <script src="./scripts/common/SignInButton.js"></script><!--post-process:delete-line
     <script src="./scripts/common/WelcomeBlock.js"></script><!--post-process:delete-line
     -->
-
+    <script src="./scripts/common/Loader.js"></script><!--post-process:delete-line-->
+    <script src="./scripts/common/ResponseError.js"></script><!--post-process:delete-line-->
     <script src="./scripts/common/RateBlock.js"></script><!--post-process:delete-line-->
     <script src="./scripts/popup.js"></script>
 </body>

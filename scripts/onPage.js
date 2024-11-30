@@ -5,13 +5,14 @@ window.mai = {
 
 const onPageActions = new Map();
 
-function openDialog(data = '') {
+function openDialog(data, mode) {
     window.mai.components.dialog.show(data);
 }
 
 onPageActions.set('openDialog', (request, sender, sendResponse) => {
     const data = request.details.data ? request.details.data : '';
-    openDialog(data);
+    const mode = request.details.mode ? request.details.mode : '';
+    openDialog(data, mode);
     sendResponse(true);
     return true;
 });
@@ -25,8 +26,6 @@ function onMessageHandler(request, sender, sendResponse) {
 
 function initMathJax() {
     if (!MathJax) return;
-    console.log('MathJax', MathJax);
-
     MathJax.options.enableMenu = true;
 }
 

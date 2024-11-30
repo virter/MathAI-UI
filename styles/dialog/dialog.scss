@@ -77,6 +77,10 @@ math * {
             }
         }
 
+        .dialog-body {
+            position: relative;
+        }
+
         .content-wrap {
             padding: 10px;
 
@@ -201,9 +205,22 @@ math * {
 
     .actions {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 15px 30px;
+
+        .response-error {
+            display: none;
+            font-size: 16px;
+            line-height: 18.5px;
+            color: $error-red1-color;
+            margin-bottom: 10px;
+
+            &.show {
+                display: block;
+            }
+        }
     }
 
 
@@ -251,6 +268,27 @@ math * {
                 background-color: $green-btn2-color;
             }
         }
+    }
+}
+
+.loader {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(19, 19, 19, 0.7);
+    visibility: hidden !important;
+    opacity: 0;
+    transition: opacity .3s 0s, visibility 0s .3s;
+
+    &.show {
+        visibility: visible !important;
+        opacity: 1;
+        transition: opacity .3s 0s, visibility 0s 0s;
     }
 }
 
