@@ -107,7 +107,7 @@ function initUploadBtn() {
             const result = await sendRequest(file, mode);
             clearFileInput();
             this.smartOpenDialog(result.data, mode);
-            setTimeout(() => { window.close(); }, 1000);
+            setTimeout(() => { window.close(); }, 500);
 
             console.log('request', result);
 
