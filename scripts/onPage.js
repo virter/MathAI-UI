@@ -3,6 +3,8 @@ window.mai = {
     services: {}
 };
 
+console.log(window.mai);
+
 const onPageActions = new Map();
 
 function openDialog(data, mode) {
