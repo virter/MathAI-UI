@@ -442,7 +442,7 @@ math * {
     <div class="dialog">
         <div class="header">
             <div class="left">
-                <img class="logo" src="${getUrl('img/icons/popup_title_icon.svg')}" />
+                <img class="logo" src="${getUrl('img/icons/title_icon.svg')}" />
                 <div class="title">${chrome.i18n.getMessage('popup_title')}</div>
             </div>
 

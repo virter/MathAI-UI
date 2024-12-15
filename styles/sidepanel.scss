@@ -4,9 +4,14 @@
     font-family: Arial;
 }
 
+html {
+    overflow: hidden;
+}
+
 body {
     margin: 0px !important;
-    width: 370px;
+    height: 99999px;
+    max-height: 100%;
 }
 
 button {
@@ -39,6 +44,7 @@ button {
 
 .main-popup {
     position: relative;
+    height: 100%;
 
     .header {
         display: flex;

@@ -2,6 +2,10 @@ function openPage(url) {
     chrome.tabs.create({ url: url });
 }
 
+chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error(error));
+
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         openPage('https://ai-math.pro/how-to-start/');

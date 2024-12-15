@@ -148,7 +148,6 @@ async function init() {
     );
 
     initUploadBtn();
-    initCloseBtn();
 }
 
 init();

@@ -2,9 +2,14 @@
   font-family: Arial;
 }
 
+html {
+  overflow: hidden;
+}
+
 body {
   margin: 0px !important;
-  width: 370px;
+  height: 99999px;
+  max-height: 100%;
 }
 
 button {
@@ -36,6 +41,7 @@ button {
 
 .main-popup {
   position: relative;
+  height: 100%;
 }
 .main-popup .header {
   display: flex;
@@ -235,4 +241,4 @@ button {
 
 .hidden {
   display: none;
-}/*# sourceMappingURL=popup.css.map */
+}/*# sourceMappingURL=sidepanel.css.map */
