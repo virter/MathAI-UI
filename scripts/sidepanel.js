@@ -1,5 +1,9 @@
 const popupLoader = new Loader(document.querySelector('[data-loader]'));
 const responseError = new ResponseError(document.querySelector('[data-response_error]'));
+const headerBlock = document.querySelector('[data-header]');
+const footerBlock = document.querySelector('[data-footer]');
+const contentBlock = document.querySelector('[data-content]');
+const hiddenContentBlock = document.querySelector('[data-hidden_content]');
 
 function localize() {
     const localizeList = document.querySelectorAll('[data-localize]');
@@ -9,51 +13,6 @@ function localize() {
     }
 }
 
-async function openDialog(data, mode) {
-    chrome.tabs.query(
-        {
-            currentWindow: true,
-            active: true
-        },
-        async (list) => {
-            const tab = list[0];
-            await chrome.tabs.sendMessage(tab.id, {
-                action: 'openDialog',
-                details: {
-                    data: data,
-                    mode: mode
-                }
-            });
-        }
-    );
-
-    return true;
-}
-
-const redirectUrlList = [
-    'chromewebstore.google.com'
-];
-
-function smartOpenDialog(data, mode) {
-    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-        /*
-        const url = tabs[0].url;
-        if (!url) {
-            //openPage(openDialogRedirectUrl);
-            return;
-        }
-
-        const urlObj = new URL(url);
-        if (redirectUrlList.indexOf(urlObj.host) !== -1) {
-            //openPage(openDialogRedirectUrl);
-            return;
-        }
-        */
-
-        openDialog(data, mode);
-        return true;
-    });
-}
 
 async function sendRequest(file, mode) {
     const formData = new FormData();
@@ -84,6 +43,20 @@ function clearFileInput() {
     fileInput.value = '';
 }
 
+function initMathJax() {
+    if (!MathJax) return;
+    MathJax.options.enableMenu = true;
+}
+
+function copyText() {
+    navigator.clipboard.writeText(hiddenContent.innerText);
+}
+
+function resetContent() {
+    contentBlock.innerHTML = '';
+    hiddenContentBlock.innerHTML = '';
+}
+
 function initUploadBtn() {
     const btn = document.querySelector('[data-upload_btn]');
     const fileInput = document.querySelector('[data-upload_file]');
@@ -103,13 +76,16 @@ function initUploadBtn() {
         popupLoader.show();
         responseError.hide();
 
+        resetContent();
+
         try {
             const result = await sendRequest(file, mode);
-            clearFileInput();
-            this.smartOpenDialog(result.data, mode);
-            setTimeout(() => { window.close(); }, 500);
+            contentBlock.innerHTML = result.data;
+            hiddenContentBlock.innerHTML = result.data;
 
-            console.log('request', result);
+            MathJax.typesetPromise([contentBlock]);
+            clearFileInput();
+
 
             popupLoader.hide();
         } catch (error) {
@@ -133,7 +109,34 @@ function openPage(url) {
     chrome.tabs.create({url: url});
 }
 
+function initBlockSize() {
+    const onResize = () => {
+        if (window.innerHeight === 0) return;
+
+        document.body.style.height = `${window.innerHeight}px`;
+        const hHeader = headerBlock.clientHeight;
+        const hFooter = footerBlock.clientHeight;
+
+        const contentHeight = window.innerHeight - hHeader - hFooter;
+        contentBlock.style.height = `${contentHeight}px`;
+
+        clearInterval(intervalId);
+    };
+
+    const intervalId = setInterval(onResize, 200);
+
+    window.onresize = onResize;
+}
+
+function initCopyBtn() {
+    const btn = document.querySelector('[data-copy_btn]');
+    btn.addEventListener('click', () => {
+        copyText();
+    });
+}
+
 async function init() {
+    initMathJax();
     localize();
 
     const rateBlock = new RateBlock(
@@ -148,6 +151,7 @@ async function init() {
     );
 
     initUploadBtn();
+    initBlockSize();
 }
 
 init();

@@ -22,6 +22,7 @@ button {
 .loader {
   position: absolute;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   left: 0;
@@ -38,51 +39,44 @@ button {
   opacity: 1;
   transition: opacity 0.3s 0s, visibility 0s 0s;
 }
-
-.main-popup {
-  position: relative;
-  height: 100%;
+.loader .text {
+  margin-top: 20px;
+  font-size: 17px;
+  line-height: 19.5px;
+  color: #ffffff;
+  text-align: center;
 }
-.main-popup .header {
+
+.main {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.header {
+  width: 100%;
+}
+
+.footer {
+  width: 100%;
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  background-color: rgb(81, 80, 246);
+  padding: 20px 15px 15px 15px;
+  width: 100%;
+  background-color: rgb(71, 70, 191);
+  box-sizing: border-box;
 }
-.main-popup .header .left {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.main-popup .header .left .logo {
-  width: 28px;
-  height: 28px;
-}
-.main-popup .header .left .title {
-  font-size: 18px;
-  color: #ffffff;
-  margin-left: 7px;
-}
-.main-popup .header .right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-.main-popup .header .right .cross {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-.main-popup .dialog-body {
-  position: relative;
-}
-.main-popup .content {
-  padding: 30px;
-}
-.main-popup .content .description {
+.top .description {
   font-size: 14px;
-  line-height: 16.5px;
+  line-height: 16.4px;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .radio-group {
@@ -91,22 +85,16 @@ button {
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  margin-top: 20px;
-}
-.radio-group label {
-  width: 100%;
+  margin-top: 10px;
 }
 .radio-group label .radio-item {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 10px;
-  width: 100%;
   box-sizing: border-box;
   background-color: transparent;
-  border-radius: 8px;
-  border: 1px solid rgb(206, 206, 255);
   transition: 0.3s;
+  cursor: pointer;
 }
 .radio-group label .radio-item .icon circle.outer {
   stroke: rgb(206, 206, 255);
@@ -116,16 +104,15 @@ button {
   fill: transparent;
 }
 .radio-group label .radio-item .title {
-  margin-left: 10px;
-  font-size: 14px;
-  font-weight: bold;
+  margin-left: 5px;
+  margin-top: 2px;
+  font-size: 17px;
+  line-height: 19.5px;
+  font-weight: 500;
+  color: #ffffff;
 }
 .radio-group label input[type=radio] {
   display: none;
-}
-.radio-group label input[type=radio]:checked ~ .radio-item {
-  background-color: rgb(227, 255, 234);
-  border-color: rgb(0, 226, 145);
 }
 .radio-group label input[type=radio]:checked ~ .radio-item .icon circle.outer {
   stroke: rgb(0, 226, 145);
@@ -137,26 +124,42 @@ button {
   transition: 0.3s;
 }
 .radio-group label + label {
-  margin-top: 20px;
+  margin-top: 10px;
+}
+
+.copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: rgb(248, 248, 248);
 }
 
 .rate-block {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   background-color: rgb(227, 255, 234);
-  padding: 15px 30px;
-  margin-top: 30px;
+  padding: 15px;
 }
 .rate-block .text {
-  font-size: 14px;
-  line-height: 16.5px;
-  font-weight: bold;
+  text-align: center;
+  font-size: 17px;
+  line-height: 19.9px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  width: calc(100% - 100px);
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 .rate-block .star-row {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 100px;
 }
 .rate-block .star-row .star {
   display: flex;
@@ -167,66 +170,30 @@ button {
   cursor: pointer;
 }
 .rate-block .star-row .star svg path {
-  fill: #cfcfcf;
+  fill: rgba(255, 255, 255, 0.5);
   transition: 0.3s;
 }
 .rate-block .star-row .star.hover svg path, .rate-block .star-row .star.active svg path {
   fill: rgb(255, 185, 33);
 }
 .rate-block .star-row .star.unhover svg path {
-  fill: #cfcfcf;
-}
-
-.upload-preview {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 10px 0px;
-  width: 100%;
-}
-.upload-preview img {
-  -o-object-fit: contain;
-     object-fit: contain;
-  height: 100px;
-  width: 100%;
+  fill: rgba(255, 255, 255, 0.5);
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 15px 30px;
+  background-color: rgb(50, 50, 168);
+  padding: 15px;
 }
-.actions .btn {
+.actions .button-wrap {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
-  padding: 6px 13px;
-  border-radius: 6px;
-  background-color: rgb(81, 80, 246);
-  cursor: pointer;
-  transition: 0.3s;
-}
-.actions .btn:hover, .actions .btn:active {
-  background-color: rgb(43, 43, 192);
-}
-.actions .btn .icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-}
-.actions .btn .icon svg {
-  width: 19px;
-  height: auto;
-}
-.actions .btn .text {
-  color: #ffffff;
-  font-size: 14px;
-  line-height: 16.5px;
-  margin-left: 5px;
+  width: 100%;
 }
 .actions .response-error {
   display: none;
@@ -237,6 +204,70 @@ button {
 }
 .actions .response-error.show {
   display: block;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 13px;
+  height: 40px;
+  border-radius: 6px;
+  background-color: rgb(113, 186, 117);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover, .btn:active {
+  background-color: rgb(87, 146, 90);
+}
+.btn.copy-btn .icon {
+  width: 15.5px;
+  height: 18.5px;
+}
+.btn .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+.btn .icon svg {
+  width: 19px;
+  height: auto;
+}
+.btn .text {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 16.5px;
+  margin-left: 5px;
+}
+
+.content {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  line-height: 30px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.content::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.content::-webkit-scrollbar-track {
+  background: rgb(241, 241, 240);
+  border-radius: 10px;
+}
+.content::-webkit-scrollbar-thumb {
+  background: rgb(191, 191, 191);
+  border-radius: 10px;
+}
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgb(105, 105, 105);
+}
+
+.hidden-content {
+  display: none;
 }
 
 .hidden {

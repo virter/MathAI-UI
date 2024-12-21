@@ -42,7 +42,7 @@ math * {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: rgb(81, 80, 246);
+  background-color: rgb(71, 70, 191);
 }
 .mai_back .dialog .header .left {
   display: flex;
@@ -142,14 +142,14 @@ math * {
   cursor: pointer;
 }
 .mai_back .green-block .rate-block .star-row .star svg path {
-  fill: #cfcfcf;
+  fill: rgba(255, 255, 255, 0.5);
   transition: 0.3s;
 }
 .mai_back .green-block .rate-block .star-row .star.hover svg path, .mai_back .green-block .rate-block .star-row .star.active svg path {
   fill: rgb(255, 185, 33);
 }
 .mai_back .green-block .rate-block .star-row .star.unhover svg path {
-  fill: #cfcfcf;
+  fill: rgba(255, 255, 255, 0.5);
 }
 .mai_back .upload-preview {
   display: flex;
@@ -187,12 +187,12 @@ math * {
   align-items: center;
   padding: 6px 13px;
   border-radius: 6px;
-  background-color: rgb(81, 80, 246);
+  background-color: rgb(71, 70, 191);
   cursor: pointer;
   transition: 0.3s;
 }
 .mai_back .btn:hover, .mai_back .btn:active {
-  background-color: rgb(43, 43, 192);
+  background-color: rgb(50, 50, 168);
 }
 .mai_back .btn .icon {
   display: flex;
@@ -212,10 +212,10 @@ math * {
   margin-left: 5px;
 }
 .mai_back .btn.copy-btn {
-  background-color: rgb(0, 199, 96);
+  background-color: rgb(113, 186, 117);
 }
 .mai_back .btn.copy-btn:hover, .mai_back .btn.copy-btn:active {
-  background-color: rgb(17, 140, 76);
+  background-color: rgb(87, 146, 90);
 }
 
 .loader {
