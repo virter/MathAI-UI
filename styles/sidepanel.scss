@@ -221,18 +221,28 @@ button {
 
 .actions {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
     background-color: $blue2-color;
     padding: 15px;
 
     .button-wrap {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        width: 100%;
+
+        &+.button-wrap {
+            margin-left: 20px;
+        }
+
+        .button-tip {
+            font-size: 14px;
+            line-height: 16.4px;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.5);
+        }
     }
 
     .response-error {
@@ -284,10 +294,16 @@ button {
         }
     }
 
+    &.screenshot-btn {
+        .icon {
+            margin-bottom: -5px;
+        }
+    }
+
     .text {
         color: $white-color;
-        font-size: 14px;
-        line-height: 16.5px;
+        font-size: 17px;
+        line-height: 20px;
         margin-left: 5px;
     }
 }

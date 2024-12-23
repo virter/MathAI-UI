@@ -182,18 +182,26 @@ button {
 
 .actions {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
   background-color: rgb(50, 50, 168);
   padding: 15px;
 }
 .actions .button-wrap {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+}
+.actions .button-wrap + .button-wrap {
+  margin-left: 20px;
+}
+.actions .button-wrap .button-tip {
+  font-size: 14px;
+  line-height: 16.4px;
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.5);
 }
 .actions .response-error {
   display: none;
@@ -235,10 +243,13 @@ button {
   width: 19px;
   height: auto;
 }
+.btn.screenshot-btn .icon {
+  margin-bottom: -5px;
+}
 .btn .text {
   color: #ffffff;
-  font-size: 14px;
-  line-height: 16.5px;
+  font-size: 17px;
+  line-height: 20px;
   margin-left: 5px;
 }
 

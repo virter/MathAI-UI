@@ -3,19 +3,14 @@ window.mai = {
     services: {}
 };
 
-console.log(window.mai);
-
 const onPageActions = new Map();
 
-function openDialog(data, mode) {
-    window.mai.components.dialog.show(data);
+function showCapture() {
+    window.mai.components.capture.show();
 }
 
-onPageActions.set('openDialog', (request, sender, sendResponse) => {
-    const data = request.details.data ? request.details.data : '';
-    const mode = request.details.mode ? request.details.mode : '';
-    openDialog(data, mode);
-    sendResponse(true);
+onPageActions.set('captureMode', (request, sender, sendResponse) => {
+    showCapture();
     return true;
 });
 
@@ -26,15 +21,27 @@ function onMessageHandler(request, sender, sendResponse) {
     return true;
 }
 
-function initMathJax() {
-    if (!MathJax) return;
-    MathJax.options.enableMenu = true;
+function initShortcut() {
+    document.addEventListener('keydown', (event) => {
+        if (!(
+                event.ctrlKey === true
+                && event.shiftKey === true
+                && event.key.toLowerCase() === 'f'
+        )) return;
+
+        if (window.mai.components.capture.visible) return;
+
+        showCapture();
+    })
 }
 
 async function load() {
-    initMathJax();
-    window.mai.components.dialog = new DialogComponent();
+    window.mai.components.capture = new CaptureComponent();
+
     chrome.runtime.onMessage.addListener(onMessageHandler);
+    initShortcut();
+
+    //window.mai.components.dialog = new DialogComponent();
 }
 
-load();
+//load();

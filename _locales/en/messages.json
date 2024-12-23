@@ -20,8 +20,11 @@
     "sidepanel_rate_text": {
         "message": "Love it? Rate us!"
     },
+    "sidepanel_screenshot_btn": {
+        "message": "Screenshot"
+    },
     "sidepanel_upload_btn": {
-        "message": "Upload picture"
+        "message": "Upload pic"
     },
     "sidepanel_copy_btn": {
         "message": "Copy text"

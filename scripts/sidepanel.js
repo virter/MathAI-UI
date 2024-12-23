@@ -49,7 +49,8 @@ function initMathJax() {
 }
 
 function copyText() {
-    navigator.clipboard.writeText(hiddenContent.innerText);
+    console.log('copyText');
+    navigator.clipboard.writeText(hiddenContentBlock.innerText);
 }
 
 function resetContent() {
@@ -152,6 +153,7 @@ async function init() {
 
     initUploadBtn();
     initBlockSize();
+    initCopyBtn();
 }
 
 init();
