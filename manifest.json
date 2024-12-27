@@ -2,7 +2,7 @@
     "name": "__MSG_appName__",
     "description": "__MSG_shortDesc__",
     "default_locale": "en",
-    "version": "1.0.7",
+    "version": "1.1.1",
     "manifest_version": 3,
     "icons": {
         "260": "icon-default.png"
@@ -45,6 +45,7 @@
             "css": [],
             "js": [
                 "scripts/vendors/webcomponents-bundle.js",
+                "scripts/vendors/html2canvas.min.js",
                 "scripts/functions/getUuid.js",
                 "scripts/functions/createElement.js",
                 "scripts/services/EventService.js",

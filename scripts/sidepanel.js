@@ -43,11 +43,6 @@ function clearFileInput() {
     fileInput.value = '';
 }
 
-function initMathJax() {
-    if (!MathJax) return;
-    MathJax.options.enableMenu = true;
-}
-
 function copyText() {
     console.log('copyText');
     navigator.clipboard.writeText(hiddenContentBlock.innerText);
@@ -84,7 +79,8 @@ function initUploadBtn() {
             contentBlock.innerHTML = result.data;
             hiddenContentBlock.innerHTML = result.data;
 
-            MathJax.typesetPromise([contentBlock]);
+            //MathJax.typesetPromise([contentBlock]);
+            renderMathInElement(contentBlock);
             clearFileInput();
 
 
@@ -129,6 +125,20 @@ function initBlockSize() {
     window.onresize = onResize;
 }
 
+function initScreenshotBtn() {
+    const btn = document.querySelector('[data-screenshot_btn]');
+    btn.addEventListener('click', () => {
+        chrome.tabs.query(
+            { currentWindow: true, active: true },
+            function(tabs) {
+                for (let i = 0; i < tabs.length; ++i) {
+                    chrome.tabs.sendMessage(tabs[i].id, { action: 'startCapture' });
+                }
+            }
+        );
+    });
+}
+
 function initCopyBtn() {
     const btn = document.querySelector('[data-copy_btn]');
     btn.addEventListener('click', () => {
@@ -137,7 +147,6 @@ function initCopyBtn() {
 }
 
 async function init() {
-    initMathJax();
     localize();
 
     const rateBlock = new RateBlock(
@@ -153,6 +162,7 @@ async function init() {
 
     initUploadBtn();
     initBlockSize();
+    //initScreenshotBtn();
     initCopyBtn();
 }
 

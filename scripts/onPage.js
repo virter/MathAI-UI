@@ -1,3 +1,4 @@
+/*
 window.mai = {
     components: {},
     services: {}
@@ -9,7 +10,7 @@ function showCapture() {
     window.mai.components.capture.show();
 }
 
-onPageActions.set('captureMode', (request, sender, sendResponse) => {
+onPageActions.set('startCapture', (request, sender, sendResponse) => {
     showCapture();
     return true;
 });
@@ -38,10 +39,11 @@ function initShortcut() {
 async function load() {
     window.mai.components.capture = new CaptureComponent();
 
-    chrome.runtime.onMessage.addListener(onMessageHandler);
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        return onMessageHandler(request, sender, sendResponse);
+    });
     initShortcut();
-
-    //window.mai.components.dialog = new DialogComponent();
 }
 
-//load();
+load();
+*/

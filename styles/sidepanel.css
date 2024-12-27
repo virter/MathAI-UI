@@ -182,22 +182,27 @@ button {
 
 .actions {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   background-color: rgb(50, 50, 168);
   padding: 15px;
 }
-.actions .button-wrap {
+.actions .buttons {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.actions .buttons .button-wrap {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 }
-.actions .button-wrap + .button-wrap {
+.actions .buttons .button-wrap + .button-wrap {
   margin-left: 20px;
 }
-.actions .button-wrap .button-tip {
+.actions .buttons .button-wrap .button-tip {
   font-size: 14px;
   line-height: 16.4px;
   margin-top: 5px;
@@ -208,7 +213,7 @@ button {
   font-size: 16px;
   line-height: 18.5px;
   color: #ef5350;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .actions .response-error.show {
   display: block;

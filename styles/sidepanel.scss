@@ -221,27 +221,33 @@ button {
 
 .actions {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     background-color: $blue2-color;
     padding: 15px;
 
-    .button-wrap {
+    .buttons {
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
+        justify-content: center;
+        align-items: flex-start;
 
-        &+.button-wrap {
-            margin-left: 20px;
-        }
-
-        .button-tip {
-            font-size: 14px;
-            line-height: 16.4px;
-            margin-top: 5px;
-            color: rgba(255, 255, 255, 0.5);
+        .button-wrap {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+    
+            &+.button-wrap {
+                margin-left: 20px;
+            }
+    
+            .button-tip {
+                font-size: 14px;
+                line-height: 16.4px;
+                margin-top: 5px;
+                color: rgba(255, 255, 255, 0.5);
+            }
         }
     }
 
@@ -250,7 +256,7 @@ button {
         font-size: 16px;
         line-height: 18.5px;
         color: $error-red1-color;
-        margin-bottom: 10px;
+        margin-top: 10px;
 
         &.show {
             display: block;
