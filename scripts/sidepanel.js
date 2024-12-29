@@ -79,7 +79,6 @@ function initUploadBtn() {
             contentBlock.innerHTML = result.data;
             hiddenContentBlock.innerHTML = result.data;
 
-            //MathJax.typesetPromise([contentBlock]);
             renderMathInElement(contentBlock);
             clearFileInput();
 
