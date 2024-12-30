@@ -79,7 +79,7 @@ function initUploadBtn() {
             contentBlock.innerHTML = result.data;
             hiddenContentBlock.innerHTML = result.data;
 
-            renderMathInElement(contentBlock);
+            //renderMathInElement(contentBlock);
             clearFileInput();
 
 
