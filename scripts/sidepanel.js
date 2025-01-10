@@ -4,6 +4,8 @@ const headerBlock = document.querySelector('[data-header]');
 const footerBlock = document.querySelector('[data-footer]');
 const contentBlock = document.querySelector('[data-content]');
 const hiddenContentBlock = document.querySelector('[data-hidden_content]');
+let levelSelect = null;
+
 
 function localize() {
     const localizeList = document.querySelectorAll('[data-localize]');
@@ -18,6 +20,9 @@ async function sendRequest(file, mode) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('options[mode]', mode);
+
+    const langItem = levelSelect.getSelectedItem();
+    formData.append('lang', langItem.value);
 
     const url = 'https://aiwordchecker.online/api/math';
     //const url = 'https://app.wordsuperb.com/dev/test.php';
@@ -171,7 +176,7 @@ function initOnMessage() {
 }
 
 function initDropdownLang() {
-    this.levelSelect = new SearchDropdown({
+    levelSelect = new SearchDropdown({
         block: document.querySelector('[data-lang_select]'),
         items: [
             { name: 'English', value: 'English' },
