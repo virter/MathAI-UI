@@ -174,15 +174,39 @@ function initDropdownLang() {
     this.levelSelect = new SearchDropdown({
         block: document.querySelector('[data-lang_select]'),
         items: [
-            { name: 'Elementary', value: 'elementary' },
-            { name: 'Middle School', value: 'middle_school' },
-            { name: 'High School', value: 'high_school' },
-            { name: 'College', value: 'college' },
-            { name: 'Graduate School', value: 'graduate_school' },
+            { name: 'English', value: 'English' },
+            { name: 'Croatian', value: 'Croatian' },
+            { name: 'Czech', value: 'Czech' },
+            { name: 'Danish', value: 'Danish' },
+            { name: 'Dutch', value: 'Dutch' },
+            { name: 'Estonian', value: 'Estonian' },
+            { name: 'Filipino', value: 'Filipino' },
+            { name: 'Finnish', value: 'Finnish' },
+            { name: 'French', value: 'French' },
+            { name: 'German', value: 'German' },
+            { name: 'Indonesian', value: 'Indonesian' },
+            { name: 'Italian', value: 'Italian' },
+            { name: 'Latvian', value: 'Latvian' },
+            { name: 'Lithuanian', value: 'Lithuanian' },
+            { name: 'Malay', value: 'Malay' },
+            { name: 'Norwegian', value: 'orwegian' },
+            { name: 'Polish', value: 'Polish' },
+            { name: 'Portuguese', value: 'Portuguese' },
+            { name: 'Romanian', value: 'Romanian' },
+            { name: 'Russian', value: 'Russian' },
+            { name: 'Slovak', value: 'Slovak' },
+            { name: 'Slovenian', value: 'Slovenian' },
+            { name: 'Spanish', value: 'Spanish' },
+            { name: 'Swedish', value: 'Swedish' },
+            { name: 'Turkish', value: 'Turkish' },
+            { name: 'Vietnamese', value: 'Vietnamese' },
         ],
-        active: 'college',
+        active: 'English',
     });
 }
+
+
+
 
 async function init() {
     localize();
