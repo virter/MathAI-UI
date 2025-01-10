@@ -35,7 +35,7 @@ class SearchDropdown {
 
         this.list.innerHTML = '';
         this.dataItems.forEach(item => {
-            this.list.innerHTML += `<button class="arg_item" data-value="${item.value}" data-item>${item.name}</button>`
+            this.list.innerHTML += `<button class="item" data-value="${item.value}" data-item>${item.name}</button>`
         })
 
         this.items = this.list.querySelectorAll('[data-item]');

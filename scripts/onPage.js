@@ -1,4 +1,3 @@
-/*
 window.mai = {
     components: {},
     services: {}
@@ -10,15 +9,20 @@ function showCapture() {
     window.mai.components.capture.show();
 }
 
-onPageActions.set('startCapture', (request, sender, sendResponse) => {
+onPageActions.set('startCapture', (request) => {
     showCapture();
     return true;
 });
 
 function onMessageHandler(request, sender, sendResponse) {
-    if (!onPageActions.has(request.action)) return false;
+    if (!onPageActions.has(request.action)) {
+        return false;
+    }
+
     const callback = onPageActions.get(request.action);
-    callback(request, sender, sendResponse);
+    callback(request);
+
+    sendResponse({ received: true });
     return true;
 }
 
@@ -46,4 +50,3 @@ async function load() {
 }
 
 load();
-*/

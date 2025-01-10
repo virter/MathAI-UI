@@ -2,6 +2,23 @@ function openPage(url) {
     chrome.tabs.create({ url: url });
 }
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'makeScreenshot') {
+        (async () => {
+            await chrome.tabs.captureVisibleTab(
+                null,
+                { format: 'png' },
+                (dataUrl) => {
+                    sendResponse({ image: dataUrl });
+                }
+            )
+
+        })();
+
+        return true;
+    }
+});
+
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));

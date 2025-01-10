@@ -11,6 +11,21 @@
     <div class="main">
         <div class="header" data-header>
             <div class="top">
+                <div class="drop-row">
+                    <div class="custom-select" data-lang_select>
+                        <input type="text" class="select-input" placeholder="" data-dropdown_input data-field="level" />
+                        <div class="select-list" data-dropdown_block>
+                            <div class="item-active hidden" data-active_item>
+                                <span data-active_item_label></span>
+                                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 4.99664L5.99999 12.9966L2.33333 9.32997L3.27333 8.38997L5.99999 11.11L13.06 4.05664L14 4.99664Z" fill="#00C94C"/></svg>
+                            </div>
+                            <div class="list-body" data-dropdown_list></div>
+                        </div>
+                        <div class="select-arrow">
+                            <svg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4.71609 5.37622L9.04622 0.126221H0.385968L4.71609 5.37622Z' fill='#C4CBEB'/></svg>
+                        </div>
+                    </div>
+                </div>
                 <div class="description" data-localize="sidepanel_description"></div>
                 <div class="radio-group">
                     <label>
@@ -39,7 +54,6 @@
             </div>
             <div class="actions">
                 <div class="buttons">
-                    <!--
                     <div class="button-wrap">
                         <button type="button" class="btn screenshot-btn" data-screenshot_btn>
                             <div class="icon">
@@ -49,7 +63,6 @@
                         </button>
                         <div class="button-tip">Ctrl + Shift + S</div>
                     </div>
-                    -->
                     <div class="button-wrap">
                         <input type="file" class="hidden" data-upload_file />
                         <button type="button" class="btn" data-upload_btn>
@@ -132,9 +145,12 @@
     </div>
 
     
+    <script src="./scripts/functions/getUuid.js"></script><!--post-process:delete-line-->
+    <script src="./scripts/services/EventService.js"></script><!--post-process:delete-line-->
     <script src="./scripts/common/Loader.js"></script><!--post-process:delete-line-->
     <script src="./scripts/common/ResponseError.js"></script><!--post-process:delete-line-->
     <script src="./scripts/common/RateBlock.js"></script><!--post-process:delete-line-->
+    <script src="./scripts/common/SearchDropdown.js"></script><!--post-process:delete-line-->
     <script defer src="./scripts/vendors/katex/katex.min.js"></script>
     <script defer src="./scripts/vendors/katex/auto-render.min.js"></script>
     <script src="./scripts/sidepanel.js"></script>

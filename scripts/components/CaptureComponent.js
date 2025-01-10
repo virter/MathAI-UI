@@ -87,6 +87,8 @@ class CaptureComponent {
 
         this.startPoint.x = event.clientX;
         this.startPoint.y = event.clientY;
+
+        console.log('onMouseDown', this.startPoint);
     }
 
     onMouseMove(event) {
@@ -98,11 +100,20 @@ class CaptureComponent {
         this.screen.style['clip-path'] = cssPolygon;
     }
 
-    onMouseUp(event) {
+    getCanvasRatio(canvas) {
+        const realWidth = canvas.width;
+        const styleWidth = parseInt(canvas.style.width);
+        if (!realWidth || !styleWidth) return false;
+
+        return realWidth/styleWidth;
+    }
+
+    async onMouseUp(event) {
         this.captureMove = false;
 
         const resPoint1 = { x: this.startPoint.x, y: this.startPoint.y };
         const resPoint2 = { x: event.clientX, y: event.clientY };
+        //console.log('onMouseUp', event.clientX, event.clientY);
 
         this.startPoint.x = -1;
         this.startPoint.y = -1;
@@ -110,61 +121,75 @@ class CaptureComponent {
         this.endPoint.y = -1;
         this.screen.style['clip-path'] = 'unset';
 
-        html2canvas(document.body)
-            .then(async canvas => {
-                const scaledCanvas = await this.scaleCanvas(canvas, document.body.offsetWidth);
-                const result = await this.cropCanvas(scaledCanvas, resPoint1.x, resPoint1.y, resPoint2.x, resPoint2.y);
-                console.log(result);
-            });
+        //console.log('result', screenshotData.image);
 
-        console.log('onMouseUp', resPoint1, resPoint2);
-    }
+        /*
+        const bodyOffset = document.body.getBoundingClientRect();
+        const x1 = resPoint1.x - bodyOffset.x;
+        const y1 = resPoint1.y - bodyOffset.y;
+        const x2 = resPoint2.x  - bodyOffset.x;
+        const y2 = resPoint2.y  - bodyOffset.y;
+        */
 
-    scaleCanvas(canvas, width) {
-        return new Promise(resolve => {
-            const imageWidth = canvas.width;
-            const imageHeight = canvas.height;
+        const x1 = resPoint1.x;
+        const y1 = resPoint1.y;
+        const x2 = resPoint2.x;
+        const y2 = resPoint2.y;
 
-            const image = new Image();
-            image.setAttribute('width', `${imageWidth}px`);
-            image.setAttribute('height', `${imageHeight}px`);
+        this.hide();
 
-            image.onload = () => {
-                const sx = 0;
-                const sy = 0;
-                const sWidth = imageWidth;
-                const sHeight = imageHeight;
+        const screenshotData = await chrome.runtime.sendMessage({ action: 'makeScreenshot' });
+        const cropImage = await this.cropImage(screenshotData.image, x1, y1, x2, y2);
 
-                const dx = 0;
-                const dy = 0;
-                const dWidth = width;
-                const dHeight = Math.round(width*imageHeight/imageWidth);
-
-                const canvasTarget = document.createElement('canvas');
-                canvasTarget.setAttribute('width', `${dWidth}px`);
-                canvasTarget.setAttribute('height', `${dHeight}px`);
-                const ctxTarget = canvasTarget.getContext("2d");
-                ctxTarget.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                image.remove();
-                
-                resolve(canvasTarget);
-            };
-
-            image.src = canvas.toDataURL();
-            canvas.remove();
+        chrome.runtime.sendMessage({
+            action: 'makeRequest',
+            image: cropImage
         });
+        /*
+        //DEBUG
+        const image = new Image();
+        image.setAttribute('width', `auto`);
+        image.setAttribute('height', `auto`);
+        image.src = cropImage;
+        document.body.appendChild(image);
+        console.log(image);
+        //image.remove();
+
+        const div = document.createElement('div');
+        div.setAttribute('style', `top:${y1}px;left:${x1}px;width:${x2 - x1}px;height:${y2 - y1}px;position:fixed;border:unset!important;
+            border-radius:unset!important;padding:0px!important;margin:0px!important;background-color:rgba(255, 0, 0, 0.3);`);
+        document.body.appendChild(div);
+        setTimeout(() => { div.remove(); }, 5000);
+        */
     }
 
-    cropCanvas(canvas, x1, y1, x2, y2) {
+    transformCoord(coord, ratio) {
+        return Math.round(coord*ratio);
+    }
+
+    cropImage(imageData, x1, y1, x2, y2) {
         return new Promise(resolve => {
             const image = new Image();
-            image.setAttribute('width', `${canvas.width}px`);
-            image.setAttribute('height', `${canvas.height}px`);
+            image.setAttribute('width', `auto`);
+            image.setAttribute('height', `auto`);
             image.onload = () => {
-                const sx = x1;
-                const sy = y1;
-                const sx2 = x2;
-                const sy2 = y2;
+                //console.log('onload', image, image.width, image.height);
+
+                const ratio = image.width/window.innerWidth;
+
+                const maxWidth = image.width;
+                const maxHeight = image.height;
+                console.log('onload', window.innerWidth, window.innerHeight, 'maxWidth', maxWidth, 'maxHeight', maxHeight);
+
+                x1 = this.transformCoord(x1, ratio);
+                y1 = this.transformCoord(y1, ratio);
+                x2 = this.transformCoord(x2, ratio);
+                y2 = this.transformCoord(y2, ratio);
+
+                const sx = x1 < 0 ? 0 : x1;
+                const sy = y1 < 0 ? 0 : y1;
+                const sx2 = x2 > maxWidth ? maxWidth : x2;
+                const sy2 = y2 > maxHeight ? maxHeight : y2;
                 const sWidth = sx2 - sx;
                 const sHeight = sy2 - sy;
 
@@ -179,17 +204,13 @@ class CaptureComponent {
 
                 const ctxTarget = canvasTarget.getContext("2d");
                 ctxTarget.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-                image.remove();
 
-                
                 const resultImage = canvasTarget.toDataURL();
-                canvasTarget.remove();
 
                 resolve(resultImage);
             };
 
-            image.src = canvas.toDataURL();
-            canvas.remove();
+            image.src = imageData;
         });
     }
     
@@ -281,10 +302,12 @@ class CaptureTemplate {
         <div class="mai_tip">
             <span>Use <b> Esc </b> to exit</span>
         </div>
+        <!--
         <div class="mai_tip">
             <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="mr-1 inline-block" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
             <span><b>Ctrl&nbsp;+&nbsp;Shift&nbsp;+&nbsp;S</b></span>
         </div>
+        -->
     </div>
 </div>`;
     }

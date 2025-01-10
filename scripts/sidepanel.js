@@ -19,8 +19,10 @@ async function sendRequest(file, mode) {
     formData.append('file', file);
     formData.append('options[mode]', mode);
 
+    const url = 'https://aiwordchecker.online/api/math';
+    //const url = 'https://app.wordsuperb.com/dev/test.php';
 
-    const response = await fetch('https://aiwordchecker.online/api/math', {
+    const response = await fetch(url, {
         method: 'POST',
         body: formData
     });
@@ -53,6 +55,31 @@ function resetContent() {
     hiddenContentBlock.innerHTML = '';
 }
 
+async function startRequestProcess(file) {
+    const mode = getMode();
+    if (!mode) return;
+
+    popupLoader.show();
+    responseError.hide();
+
+    resetContent();
+
+    try {
+        const result = await sendRequest(file, mode);
+        contentBlock.innerHTML = result.data;
+        hiddenContentBlock.innerHTML = result.data;
+
+        //renderMathInElement(contentBlock);
+        clearFileInput();
+        popupLoader.hide();
+    } catch (error) {
+        console.log(error);
+
+        popupLoader.hide();
+        responseError.show();
+    }
+}
+
 function initUploadBtn() {
     const btn = document.querySelector('[data-upload_btn]');
     const fileInput = document.querySelector('[data-upload_file]');
@@ -63,33 +90,8 @@ function initUploadBtn() {
 
     fileInput.addEventListener('change', async (event) => {
         const [file] = fileInput.files;
-
         if (!file) return;
-
-        const mode = getMode();
-        if (!mode) return;
-
-        popupLoader.show();
-        responseError.hide();
-
-        resetContent();
-
-        try {
-            const result = await sendRequest(file, mode);
-            contentBlock.innerHTML = result.data;
-            hiddenContentBlock.innerHTML = result.data;
-
-            //renderMathInElement(contentBlock);
-            clearFileInput();
-
-
-            popupLoader.hide();
-        } catch (error) {
-            console.log(error);
-
-            popupLoader.hide();
-            responseError.show();
-        }
+        startRequestProcess(file);
     });
 }
 
@@ -145,6 +147,43 @@ function initCopyBtn() {
     });
 }
 
+function dataURIToBlob(dataURI) {
+    const splitDataURI = dataURI.split(',')
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+
+    const ia = new Uint8Array(byteString.length)
+    for (let i = 0; i < byteString.length; i++)
+        ia[i] = byteString.charCodeAt(i)
+
+    return new Blob([ia], { type: mimeString })
+}
+
+
+function initOnMessage() {
+    chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+        if (message.action === 'makeRequest') {
+            const file = dataURIToBlob(message.image);
+            startRequestProcess(file);
+            //console.log('makeRequest', 'image', message.image);
+        }
+    });
+}
+
+function initDropdownLang() {
+    this.levelSelect = new SearchDropdown({
+        block: document.querySelector('[data-lang_select]'),
+        items: [
+            { name: 'Elementary', value: 'elementary' },
+            { name: 'Middle School', value: 'middle_school' },
+            { name: 'High School', value: 'high_school' },
+            { name: 'College', value: 'college' },
+            { name: 'Graduate School', value: 'graduate_school' },
+        ],
+        active: 'college',
+    });
+}
+
 async function init() {
     localize();
 
@@ -161,8 +200,10 @@ async function init() {
 
     initUploadBtn();
     initBlockSize();
-    //initScreenshotBtn();
+    initScreenshotBtn();
     initCopyBtn();
+    initOnMessage();
+    initDropdownLang();
 }
 
 init();
