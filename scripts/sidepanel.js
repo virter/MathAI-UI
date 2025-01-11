@@ -60,6 +60,11 @@ function resetContent() {
     hiddenContentBlock.innerHTML = '';
 }
 
+function prepareContent(content) {
+    content = content.replaceAll('\n', '<br>');
+    return content;
+}
+
 async function startRequestProcess(file) {
     const mode = getMode();
     if (!mode) return;
@@ -71,10 +76,13 @@ async function startRequestProcess(file) {
 
     try {
         const result = await sendRequest(file, mode);
-        contentBlock.innerHTML = result.data;
-        hiddenContentBlock.innerHTML = result.data;
 
-        //renderMathInElement(contentBlock);
+        hiddenContentBlock.innerHTML = result.data;
+        //const content = prepareContent(result.data)
+        const content = result.data;
+        contentBlock.innerHTML = content;
+
+        renderMathInElement(contentBlock);
         clearFileInput();
         popupLoader.hide();
     } catch (error) {
