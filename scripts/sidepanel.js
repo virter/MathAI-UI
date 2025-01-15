@@ -22,7 +22,7 @@ async function sendRequest(file, mode) {
     formData.append('options[mode]', mode);
 
     const langItem = levelSelect.getSelectedItem();
-    formData.append('lang', langItem.value);
+    formData.append('options[lang]', langItem.value);
 
     const url = 'https://aiwordchecker.online/api/math';
     //const url = 'https://app.wordsuperb.com/dev/test.php';
