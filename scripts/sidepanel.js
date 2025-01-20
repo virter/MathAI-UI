@@ -227,7 +227,7 @@ async function init() {
     const rateBlock = new RateBlock(
         document.querySelector('[data-rate_block]'),
         () => {
-            openPage('https://docs.google.com/forms/d/e/1FAIpQLSfOHXmNDwTGK0-5VhoxxlIGvLxs0sw0yDruaK4v4RfSTuax2Q/viewform');
+            openPage('https://docs.google.com/forms/d/1y8rwj2CUKDi93vHJy27qDr4NFlcYz-qeEuf63ihwrwg');
         },
         () => {
             // PAGE FEEDBACK

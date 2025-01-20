@@ -2,6 +2,10 @@ function openPage(url) {
     chrome.tabs.create({ url: url });
 }
 
+function setDefaults() {
+    chrome.runtime.setUninstallURL('https://docs.google.com/forms/d/1y8rwj2CUKDi93vHJy27qDr4NFlcYz-qeEuf63ihwrwg');
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'makeScreenshot') {
         (async () => {
@@ -24,6 +28,8 @@ chrome.sidePanel
   .catch((error) => console.error(error));
 
 chrome.runtime.onInstalled.addListener((details) => {
+    setDefaults();
+
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         openPage('https://ai-math.pro/how-to-start/');
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
