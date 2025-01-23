@@ -4,7 +4,8 @@ class SearchDropdown {
             block,
             items,
             active = null,
-            handlers = {}
+            handlers = {},
+            callback = null
         } = args;
 
         this.block = block;
@@ -15,6 +16,8 @@ class SearchDropdown {
             name: '',
             value: null
         };
+
+        this.callback = callback;
 
         this.eventService = new EventService();
 
@@ -64,7 +67,7 @@ class SearchDropdown {
             element: this.input,
             handler: (event) => {
                 this.showSelectedItem();
-                this.hideList(1);
+                this.hideList();
             }
         });
 
@@ -81,7 +84,7 @@ class SearchDropdown {
             handler: (event) => {
                 if (event.key === 'Tab' || event.key === 'Escape' ) {
                     this.showSelectedItem();
-                    this.hideList(3);
+                    this.hideList();
                 }
             }
         });
@@ -98,8 +101,13 @@ class SearchDropdown {
             event: 'mousedown',
             element: this.items,
             handler: (event) => {
+                if (this.callback) {
+                    const value = event.target.dataset['value'];
+                    this.callback(value);
+                }
+
                 this.selectItem(event.target);
-                this.hideList(4);
+                this.hideList();
                 this.unfocusInput();
             }
         });

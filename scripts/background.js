@@ -1,5 +1,17 @@
+//post-process:import:./functions/getUuid.js
+//post-process:import:./services/AnalyticsService.js
+importScripts('./functions/getUuid.js'); //post-process:delete-line
+importScripts('./services/AnalyticsService.js'); //post-process:delete-line\
+
+
 function openPage(url) {
     chrome.tabs.create({ url: url });
+}
+
+async function setUserId(userId) {
+    await chrome.storage.sync.set({
+        'userId': userId
+    });
 }
 
 function setDefaults() {
@@ -27,10 +39,16 @@ chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));
 
-chrome.runtime.onInstalled.addListener((details) => {
+chrome.runtime.onInstalled.addListener(async (details) => {
     setDefaults();
 
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        const userId = getUuid();
+        await setUserId(userId);
+
+        const analyticsService = new AnalyticsService();
+        analyticsService.sendEvent(userId, 'extension_install');
+
         openPage('https://ai-math.pro/how-to-start/');
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         // When extension is updated

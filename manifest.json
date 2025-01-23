@@ -8,6 +8,7 @@
         "260": "icon-default.png"
     },
     "permissions": [
+        "storage",
         "sidePanel"
     ],
     "action": {
@@ -47,8 +48,10 @@
                 "scripts/vendors/webcomponents-bundle.js",
                 "scripts/vendors/html2canvas.min.js",
                 "scripts/functions/getUuid.js",
+                "scripts/functions/getUserId.js",
                 "scripts/functions/createElement.js",
                 "scripts/services/EventService.js",
+                "scripts/services/AnalyticsService.js",
                 "scripts/components/CaptureComponent.js",
                 "scripts/onPage.js"
             ],

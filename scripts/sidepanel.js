@@ -1,10 +1,11 @@
 const popupLoader = new Loader(document.querySelector('[data-loader]'));
 const responseError = new ResponseError(document.querySelector('[data-response_error]'));
+const analyticsService = new AnalyticsService();
 const headerBlock = document.querySelector('[data-header]');
 const footerBlock = document.querySelector('[data-footer]');
 const contentBlock = document.querySelector('[data-content]');
 const hiddenContentBlock = document.querySelector('[data-hidden_content]');
-let levelSelect = null;
+let langSelect = null;
 
 
 function localize() {
@@ -21,7 +22,7 @@ async function sendRequest(file, mode) {
     formData.append('file', file);
     formData.append('options[mode]', mode);
 
-    const langItem = levelSelect.getSelectedItem();
+    const langItem = langSelect.getSelectedItem();
     formData.append('options[lang]', langItem.value);
 
     const url = 'https://aiwordchecker.online/api/math';
@@ -45,13 +46,20 @@ function getMode() {
     return radio.value;
 }
 
+function initRadio() {
+    for (let item of document.querySelectorAll('[name="mode"]')) {
+        item.addEventListener('click', async () => {
+            analyticsService.sendEvent(userId, `change_mode_${item.value}`);
+        })
+    }
+}
+
 function clearFileInput() {
     const fileInput = document.querySelector('[data-upload_file]');
     fileInput.value = '';
 }
 
 function copyText() {
-    console.log('copyText');
     navigator.clipboard.writeText(hiddenContentBlock.innerText);
 }
 
@@ -99,6 +107,7 @@ function initUploadBtn() {
 
     btn.addEventListener('click', () => {
         fileInput.click();
+        analyticsService.sendEvent(userId, `click_upload_btn`);
     });
 
     fileInput.addEventListener('change', async (event) => {
@@ -150,6 +159,7 @@ function initScreenshotBtn() {
                 }
             }
         );
+        analyticsService.sendEvent(userId, `click_screenshot_btn`);
     });
 }
 
@@ -157,6 +167,7 @@ function initCopyBtn() {
     const btn = document.querySelector('[data-copy_btn]');
     btn.addEventListener('click', () => {
         copyText();
+        analyticsService.sendEvent(userId, `click_copy_btn`);
     });
 }
 
@@ -178,13 +189,12 @@ function initOnMessage() {
         if (message.action === 'makeRequest') {
             const file = dataURIToBlob(message.image);
             startRequestProcess(file);
-            //console.log('makeRequest', 'image', message.image);
         }
     });
 }
 
 function initDropdownLang() {
-    levelSelect = new SearchDropdown({
+    langSelect = new SearchDropdown({
         block: document.querySelector('[data-lang_select]'),
         items: [
             { name: 'English', value: 'English' },
@@ -215,13 +225,18 @@ function initDropdownLang() {
             { name: 'Vietnamese', value: 'Vietnamese' },
         ],
         active: 'English',
+        callback: (value) => {
+            analyticsService.sendEvent(userId, `select_lang_${value}`);
+        }
     });
 }
 
 
-
+let userId = null;
 
 async function init() {
+    userId = await getUserId();
+
     localize();
 
     const rateBlock = new RateBlock(
@@ -229,7 +244,7 @@ async function init() {
         () => {
             openPage('https://docs.google.com/forms/d/1y8rwj2CUKDi93vHJy27qDr4NFlcYz-qeEuf63ihwrwg');
         },
-        () => {
+        () => { 
             // PAGE FEEDBACK
             openPage('https://chrome.google.com/webstore/detail/ai-math/madagoalbkmkbcgfocmiiabjfccnggpf/reviews');
         }
@@ -241,6 +256,7 @@ async function init() {
     initCopyBtn();
     initOnMessage();
     initDropdownLang();
+    initRadio();
 }
 
 init();
