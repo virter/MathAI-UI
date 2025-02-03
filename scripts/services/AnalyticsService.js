@@ -4,15 +4,17 @@ class AnalyticsService {
         this.apiUrl = 'https://api2.amplitude.com/2/httpapi';
     }
 
-    async sendEvent(userId, eventType) {
+    async sendEvent(userId, eventType, props = null) {
+        const event = {
+            user_id: userId,
+            event_type: eventType
+        };
+
+        if (props) event.event_properties = props;
+
         const data = {
             api_key: this.apiKey,
-            events: [
-                {
-                    user_id: userId,
-                    event_type: eventType
-                }
-            ]
+            events: [ event ]
         };
 
         let response = await fetch(this.apiUrl, {

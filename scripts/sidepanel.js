@@ -49,7 +49,7 @@ function getMode() {
 function initRadio() {
     for (let item of document.querySelectorAll('[name="mode"]')) {
         item.addEventListener('click', async () => {
-            analyticsService.sendEvent(userId, `change_mode_${item.value}`);
+            analyticsService.sendEvent(userId, 'change_mode', { mode: item.value });
         })
     }
 }
@@ -226,7 +226,7 @@ function initDropdownLang() {
         ],
         active: 'English',
         callback: (value) => {
-            analyticsService.sendEvent(userId, `select_lang_${value}`);
+            analyticsService.sendEvent(userId, 'select_lang', { lang: value });
         }
     });
 }
