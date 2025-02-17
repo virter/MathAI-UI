@@ -1,48 +1,51 @@
 {
   "appName": {
-      "message": "AI Math"
+    "message": "Math solver with steps"
   },
   "shortDesc": {
-      "message": "Solve math problems effortlessly with AI Math Solver! Get step-by-step solutions powered by AI Math. Perfect for math homework."
+    "message": "Math problem solver is a Chrome extension to solve math by photo. Take a photo and get step-by-step ai math solution."
   },
-    "sidepanel_description": {
-        "message": "Upload a picture of your math problem and wait 5-10 seconds."
-    },
-    "sidepanel_step_by_step_mode": {
-        "message": "Step-by-step Mode"
-    },
-    "sidepanel_short_answer_mode": {
-        "message": "Short answer Mode"
-    },
-    "sidepanel_rate_text": {
-        "message": "Love it? Rate us!"
-    },
-    "sidepanel_screenshot_btn": {
-        "message": "Screenshot"
-    },
-    "sidepanel_upload_btn": {
-        "message": "Upload pic"
-    },
-    "sidepanel_copy_btn": {
-        "message": "Copy text"
-    },
-    "sidepanel_internal_error": {
-        "message": "An error occurred. Please try again."
-    },
-    "sidepanel_loader_text": {
-        "message": "Don't rush, please wait 5-10 seconds<br>to get a response."
-    },
+  "storeDesc": {
+    "message": "Math Solver with Steps is a Chrome extension that allows you to solve math by photo and get step-by-step explanations. Simply upload a screenshot or enter a problem to receive a detailed solution!\n\n📚 Transform Your AI Math Learning Experience  \n✅ Introducing the ultimate Math solver with steps Chrome extension, designed to simplify the learning process.  \n✅ Whether you're tackling algebra, calculus, or any subject in between, this tool is your go-to solution.  \n✅ Experience real-time solutions and step-by-step explanations that make learning easier than ever.  \n\n🔍 Seamless Integration for Students and Professionals  \n📍 Perfect for students needing math homework help or professionals dealing with quantitative tasks.  \n📍 The Math solver with steps not only solves problems but also teaches you the methodology by showing each step clearly.  \n📍 From basic equations to advanced calculus, enhance your learning and problem-solving skills effortlessly.  \n\nThis extension is not just about providing answers; it's about enhancing your understanding and building your confidence. The detailed step-by-step math solver approach ensures that you grasp the concepts behind the problems, making it easier to tackle similar questions in the future. Whether you're preparing for an exam or need to solve complex problems at work, this tool provides invaluable support.\n\n📸 Solve Problems with Photo  \n🔹 Use screenshot feature of the ai math solver with steps to snap a photo of your math problem.  \n🔹 The math photo solver technology quickly analyzes the image and provides you with a detailed solution.  \n🔹 Perfect for visual learners and those who prefer a more interactive approach.  \n\nMath Solver with Steps not only aims to help you solve math problems but also to deepen your understanding of theoretical concepts. It's designed to be an educational tool that complements your academic or professional journey, making homework not just easier but also more enjoyable. With its easy-to-use interface and powerful features, it's the perfect companion for anyone looking to enhance their skills.\n\n🔍 Seamless Integration for Students and Professionals  \n📍 Perfect for students needing homework help or professionals dealing with quantitative tasks.  \n📍 The Math solver with steps not only solves problems but also teaches you the methodology by showing each step clearly.  \n📍 From basic equations to advanced calculus, enhance your learning and problem-solving skills effortlessly.  \n\nThis extension is not just about providing answers; it's about enhancing your understanding and building your confidence in mathematics. The detailed step-by-step math solver approach ensures that you grasp the concepts behind the problems, making it easier to tackle similar questions in the future. Whether you're preparing for an exam or need to solve complex problems at work, this tool provides invaluable support.\n\n📸 Solve Problems with Photo  \n🔹 Use screenshot feature of the ai math solver with steps to snap a photo of your math problem.  \n🔹 The math photo solver technology quickly analyzes the image and provides you with a detailed solution.  \n🔹 Perfect for visual learners and those who prefer a more interactive approach to solving algebra problems.  \n\nKey features of the Math solver with steps Chrome extension:\n1️⃣ Step-by-step solutions for a wide range of problems.\n2️⃣ Photo math solver capabilities to solve problems by taking pictures.\n3️⃣ AI-enhanced tools to provide accurate and reliable answers.\n4️⃣ Interactive learning with chatgpt features.\n5️⃣ User-friendly interface designed for students and professionals.\n6️⃣ Regular updates and improvements to ensure the best performance.\n\nThis extension not only aims to help you solve math problems but also to deepen your understanding of concepts. It's designed to be an educational tool that complements your academic or professional journey, making homework not just easier but also more enjoyable. With its easy-to-use interface and powerful features, Math Solver with Steps is the perfect companion for anyone looking to enhance their skills.\n\n🙋‍♂️ Frequently asked questions:\n\n💡 Can AI solve math problems?\n➤ Yes, AI can tackle a wide range of challenges, from basic arithmetic to complex calculus equations. Math Solver with Steps helps you solve problems quickly and accurately.\n\n💡 How to solve math problems with AI?\n➤ Utilize AI tools like symbolic computation engines or machine learning models that interpret and solve expressions. Math Solver with Steps allows you to solve math by photo and get step-by-step explanations.\n\n💡 Can I use ChatGPT for math?\n➤ ChatGPT can assist with it by explaining concepts and solving simpler problems, but it may struggle with advanced calculations. \n\n\n💡 How accurate is ChatGPT at homework solving?\n➤ ChatGPT performs well with basic to moderately complex problems but may not always provide perfect accuracy on advanced topics. Math Solver with Steps enhances accuracy by solving problems with clear explanations.\n\n💡 Can ChatGPT do solve math?\n➤ Yes, ChatGPT can help solve problems, especially those involving clear, straightforward calculations. "
+  },
+"sidepanel_description": {
+    "message": "Upload a picture of your math problem and wait 5-10 seconds."
+},
+"sidepanel_step_by_step_mode": {
+    "message": "Step-by-step Mode"
+},
+"sidepanel_short_answer_mode": {
+    "message": "Short answer Mode"
+},
+"sidepanel_rate_text": {
+    "message": "Love it? Rate us!"
+},
+"sidepanel_screenshot_btn": {
+    "message": "Screenshot"
+},
+"sidepanel_upload_btn": {
+    "message": "Upload pic"
+},
+"sidepanel_copy_btn": {
+    "message": "Copy text"
+},
+"sidepanel_internal_error": {
+    "message": "An error occurred. Please try again."
+},
+"sidepanel_loader_text": {
+    "message": "Don't rush, please wait 5-10 seconds<br>to get a response."
+},
 
-    "dialog_title": {
-        "message": "AI Math"
-    },
-    "dialog_help_and_rate": {
-        "message": "Help and rate us"
-    },
-    "dialog_copy_btn": {
-        "message": "Copy text"
-    },
-    "dialog_upload_btn": {
-        "message": "Upload picture"
-    }
+"dialog_title": {
+    "message": "AI Math"
+},
+"dialog_help_and_rate": {
+    "message": "Help and rate us"
+},
+"dialog_copy_btn": {
+    "message": "Copy text"
+},
+"dialog_upload_btn": {
+    "message": "Upload picture"
+}
 }
