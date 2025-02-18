@@ -1,3 +1,15 @@
+@font-face {
+  font-family: STIX Two Math;
+  src: local("STIXTwoMath-Regular"), url("./fonts/STIXTwoMath-Regular.woff2"), url("./fonts/STIXTwoMath-Regular.woff");
+}
+math, math * {
+  font-family: STIX Two Math;
+}
+
+mrow {
+  margin-bottom: 10px;
+}
+
 * {
   font-family: Arial;
 }
@@ -265,6 +277,187 @@ button {
   font-size: 17px;
   line-height: 20px;
   margin-left: 5px;
+}
+
+.quest-wrap {
+  position: relative;
+  width: 100%;
+  height: 0px;
+}
+.quest-wrap .quest-block {
+  display: none;
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  width: 280px;
+  transform: translate(-50%, 0px);
+  max-width: calc(100% - 30px);
+}
+.quest-wrap .quest-block .main-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 19px 15px 10px 15px;
+  border-radius: 15px;
+  background-color: rgb(71, 70, 191);
+  box-sizing: border-box;
+}
+.quest-wrap .quest-block .main-box .cross {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 10px;
+  right: 13px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.quest-wrap .quest-block .main-box .cross svg {
+  width: 14px;
+  height: 14px;
+}
+.quest-wrap .quest-block .main-box .title {
+  font-size: 15px;
+  line-height: 19px;
+  text-align: center;
+  color: #ffffff;
+}
+.quest-wrap .quest-block .main-box .subtitle {
+  margin-top: 3px;
+  font-size: 14px;
+  line-height: 16.4px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+.quest-wrap .quest-block .main-box .quest-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 7px;
+  padding: 8px 10px;
+  height: auto;
+  color: #ffffff;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn svg {
+  width: 20px;
+  height: auto;
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn span {
+  margin-left: 5px;
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn.yes-btn {
+  background-color: rgb(113, 186, 117);
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn.yes-btn:hover {
+  background-color: rgb(87, 146, 90);
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn.no-btn {
+  background-color: #FE6263;
+}
+.quest-wrap .quest-block .main-box .quest-actions .btn.no-btn:hover {
+  background-color: #d75353;
+}
+.quest-wrap .quest-block .expand-box {
+  position: absolute;
+  width: 100%;
+  top: calc(100% - 20px);
+  left: 0px;
+  z-index: -1;
+}
+.quest-wrap .quest-block .expand-box .link {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  padding-top: 30px;
+  box-sizing: border-box;
+  background-color: rgb(50, 50, 168);
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.quest-wrap .quest-block .expand-box.show-link .link {
+  display: flex;
+}
+.quest-wrap .quest-block .expand-box .review {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  padding: 10px 15px;
+  padding-top: 30px;
+  box-sizing: border-box;
+  background-color: rgb(50, 50, 168);
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.quest-wrap .quest-block .expand-box .review .field-row textarea {
+  padding: 8px 10px;
+  border-radius: 6px;
+  width: 100%;
+  height: 68px;
+  font-size: 14px;
+  line-height: 14px;
+  outline: none;
+  box-sizing: border-box;
+  resize: none;
+  vertical-align: top;
+}
+.quest-wrap .quest-block .expand-box .review .button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.quest-wrap .quest-block .expand-box .review .button-row .button-cell .send-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 10px;
+  color: #ffffff;
+  font-size: 16px;
+  border-radius: 6px;
+  background-color: rgb(95, 94, 219);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.quest-wrap .quest-block .expand-box .review .button-row .button-cell .send-btn:hover, .quest-wrap .quest-block .expand-box .review .button-row .button-cell .send-btn:active {
+  background-color: #4a4ab4;
+}
+.quest-wrap .quest-block .expand-box.show-review .review {
+  display: flex;
+}
+.quest-wrap .quest-block .expand-box a {
+  font-size: 15px;
+  color: #ffffff;
+  text-decoration: none;
+}
+.quest-wrap .quest-block .expand-box a .underline {
+  text-decoration: underline;
+}
+.quest-wrap .quest-block .expand-box a:hover .underline {
+  text-decoration: none;
+}
+.quest-wrap.show .quest-block {
+  display: block;
 }
 
 .content {

@@ -44,5 +44,30 @@
     },
     "dialog_upload_btn": {
         "message": "Upload picture"
+    },
+
+    "quest_box_title": {
+        "message": "Satisfied with the result?"
+    },
+    "quest_box_subtitle": {
+        "message": "— It helps us to improve AI"
+    },
+    "quest_box_yes": {
+        "message": "Yes"
+    },
+    "quest_box_no": {
+        "message": "No"
+    },
+    "quest_box_link": {
+        "message": "Review us on Chrome Web Store"
+    },
+    "quest_box_field_placeholder": {
+        "message": "Describe your issue shortly"
+    },
+    "quest_box_send": {
+        "message": "Send"
+    },
+    "quest_box_review_email": {
+        "message": "review@mail.com"
     }
 }

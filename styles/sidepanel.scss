@@ -271,7 +271,7 @@ button {
                 font-size: 14px;
                 line-height: 16.4px;
                 margin-top: 5px;
-                color: rgba(255, 255, 255, 0.5);
+                color: $grey1-color;
             }
         }
     }
@@ -336,6 +336,232 @@ button {
         font-size: 17px;
         line-height: 20px;
         margin-left: 5px;
+    }
+}
+
+.quest-wrap {
+    position: relative;
+    width: 100%;
+    height: 0px;
+
+    .quest-block {
+        display: none;
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        width: 280px;
+        transform: translate(-50%, 0px);
+        max-width: calc(100% - 30px);
+
+        .main-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+            padding: 19px 15px 10px 15px;
+            border-radius: 15px;
+            background-color: $blue1-color;
+            box-sizing: border-box;
+
+            .cross {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: 10px;
+                right: 13px;
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+
+                svg {
+                    width: 14px;
+                    height: 14px;
+                }
+            }
+
+            .title {
+                font-size: 15px;
+                line-height: 19px;
+                text-align: center;
+                color: $white-color
+            }
+
+            .subtitle {
+                margin-top: 3px;
+                font-size: 14px;
+                line-height: 16.4px;
+                text-align: center;
+                color: $grey1-color;
+            }
+
+            .quest-actions {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+
+                .btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 7px;
+                    padding: 8px 10px;
+                    height: auto;
+                    color: $white-color;
+                    font-size: 16px;
+                    border-radius: 5px;
+                    transition: 0.3s;
+
+                    svg {
+                        width: 20px;
+                        height: auto;
+                    }
+
+                    span {
+                        margin-left: 5px;
+                    }
+
+                    &.yes-btn {
+                        background-color: $green-btn1-color;
+
+                        &:hover {
+                            background-color: $green-btn2-color;
+                        }
+                    }
+
+                    &.no-btn {
+                        background-color: $red-btn1-color;
+
+                        &:hover {
+                            background-color: $red-btn2-color;
+                        }
+                    }
+                }
+            }
+        }
+
+        .expand-box {
+            position: absolute;
+            width: 100%;
+            top: calc(100% - 20px);
+            left: 0px;
+            z-index: -1;
+
+            .link {
+                display: none;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                padding: 10px 15px;
+                padding-top: 30px;
+                box-sizing: border-box;
+                background-color: $blue2-color;
+                border-bottom-right-radius: 15px;
+                border-bottom-left-radius: 15px;
+            }
+
+            &.show-link {
+                .link {
+                    display: flex;
+                }
+            }
+
+            .review {
+                display: none;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                padding: 10px 15px;
+                padding-top: 30px;
+                box-sizing: border-box;
+                background-color: $blue2-color;
+                border-bottom-right-radius: 15px;
+                border-bottom-left-radius: 15px;
+
+                .field-row {
+                    textarea {
+                        padding: 8px 10px;
+                        border-radius: 6px;
+                        width: 100%;
+                        height: 68px;
+                        font-size: 14px;
+                        line-height: 14px;
+                        outline: none;
+                        box-sizing: border-box;
+                        resize: none;
+                        vertical-align: top;
+                    }
+                }
+
+                .button-row {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 10px;
+
+                    .message-cell {
+
+                    }
+
+                    .button-cell {
+                        .send-btn {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 8px 10px;
+                            color: $white-color;
+                            font-size: 16px;
+                            border-radius: 6px;
+                            background-color: $blue1-btn-color;
+                            cursor: pointer;
+                            transition: .3s;
+                        
+                            &:hover,
+                            &:active {
+                                background-color: $blue2-btn-color;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.show-review {
+                .review {
+                    display: flex;
+                }
+            }
+
+
+            a {
+                font-size: 15px;
+                color: $white-color;
+                text-decoration: none;
+
+                .underline {
+                    text-decoration: underline;
+                }
+
+                &:hover {
+                    .underline {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+
+    &.show {
+        .quest-block {
+            display: block;
+        }
     }
 }
 

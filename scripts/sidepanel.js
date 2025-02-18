@@ -9,13 +9,18 @@ let langSelect = null;
 
 
 function localize() {
-    const localizeList = document.querySelectorAll('[data-localize]');
+    let localizeList = document.querySelectorAll('[data-localize]');
     for (let item of localizeList) {
         const label = item.dataset['localize'];
         item.innerHTML = chrome.i18n.getMessage(label);
     }
-}
 
+    localizeList = document.querySelectorAll('[data-localize_placeholder]');
+    for (let item of localizeList) {
+        const label = item.dataset['localize_placeholder'];
+        item.setAttribute('placeholder', chrome.i18n.getMessage(label));
+    }
+}
 
 async function sendRequest(file, mode) {
     const formData = new FormData();
@@ -26,7 +31,6 @@ async function sendRequest(file, mode) {
     formData.append('options[lang]', langItem.value);
 
     const url = 'https://aiwordchecker.online/api/math';
-    //const url = 'https://app.wordsuperb.com/dev/test.php';
 
     const response = await fetch(url, {
         method: 'POST',
@@ -49,7 +53,13 @@ function getMode() {
 function initRadio() {
     for (let item of document.querySelectorAll('[name="mode"]')) {
         item.addEventListener('click', async () => {
-            analyticsService.sendEvent(userId, 'change_mode', { mode: item.value });
+            analyticsService.sendEvent(
+                userId,
+                'user_action',
+                {
+                    action: 'change_mode',
+                    mode: item.value
+                });
         })
     }
 }
@@ -92,6 +102,8 @@ async function startRequestProcess(file) {
 
         renderMathInElement(contentBlock);
         clearFileInput();
+        questBlock.show();
+
         popupLoader.hide();
     } catch (error) {
         console.log(error);
@@ -107,7 +119,12 @@ function initUploadBtn() {
 
     btn.addEventListener('click', () => {
         fileInput.click();
-        analyticsService.sendEvent(userId, `click_upload_btn`);
+        analyticsService.sendEvent(
+            userId,
+            'user_action',
+            {
+                action: 'click_upload_btn'
+            });
     });
 
     fileInput.addEventListener('change', async (event) => {
@@ -159,7 +176,12 @@ function initScreenshotBtn() {
                 }
             }
         );
-        analyticsService.sendEvent(userId, `click_screenshot_btn`);
+        analyticsService.sendEvent(
+            userId,
+            'user_action',
+            {
+                action: 'click_screenshot_btn'
+            });
     });
 }
 
@@ -167,7 +189,12 @@ function initCopyBtn() {
     const btn = document.querySelector('[data-copy_btn]');
     btn.addEventListener('click', () => {
         copyText();
-        analyticsService.sendEvent(userId, `click_copy_btn`);
+        analyticsService.sendEvent(
+            userId,
+            'user_action',
+            {
+                action: 'click_copy_btn'
+            });
     });
 }
 
@@ -226,13 +253,87 @@ function initDropdownLang() {
         ],
         active: 'English',
         callback: (value) => {
-            analyticsService.sendEvent(userId, 'select_lang', { lang: value });
+            analyticsService.sendEvent(
+                userId,
+                'user_action',
+                {
+                    action: 'select_lang',
+                    lang: value
+                });
         }
     });
 }
 
+class QuestBlock {
+    constructor(element) {
+        this.element = element;
+     
+        this.initElements();
+        this.initListeners();
+    }
+
+    initElements() {
+        this.crossBtn = this.element.querySelector('[data-cross_btn]');
+        
+        this.yesBtn = this.element.querySelector('[data-quest_yes_btn]');
+        this.noBtn = this.element.querySelector('[data-quest_no_btn]');
+
+        this.expandBox = this.element.querySelector('[data-quest_expand_box]');
+        this.expandLink = this.element.querySelector('[data-quest_exp_link]');
+        this.expandReview = this.element.querySelector('[data-quest_exp_review]');
+    }
+
+    initListeners() {
+        this.crossBtn.addEventListener('click', () => {
+            this.hide();
+        });
+
+        this.yesBtn.addEventListener('click', () => {
+            console.log('yes');
+            this.expandBox.classList.remove('show-review');
+            this.expandBox.classList.add('show-link');
+        });
+
+        this.noBtn.addEventListener('click', () => {
+            console.log('no');
+            this.expandBox.classList.remove('show-link');
+            this.expandBox.classList.add('show-review');
+        });
+    }
+
+    async show() {
+        const d = await this.getStoreDate();
+        if (d === this.getDate()) return;
+        this.element.classList.add('show');
+    }
+
+    async hide() {
+        await this.setStoreDate();
+        this.element.classList.remove('show');
+    }
+
+    getDate() {
+        const d = new Date();
+        return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    }
+
+    async setStoreDate() {
+        const d = this.getDate();
+        await chrome.storage.sync.set({
+            'QuestBlockHideDate': d
+        });
+    }
+
+    async getStoreDate() {
+        const store = await chrome.storage.sync.get([ 'QuestBlockHideDate' ]);
+        return store.QuestBlockHideDate ? store.QuestBlockHideDate : '';
+    }
+}
+
+
 
 let userId = null;
+let questBlock = null;
 
 async function init() {
     userId = await getUserId();
@@ -249,6 +350,8 @@ async function init() {
             openPage('https://chrome.google.com/webstore/detail/ai-math/madagoalbkmkbcgfocmiiabjfccnggpf/reviews');
         }
     );
+
+    questBlock = new QuestBlock(document.querySelector('[data-quest_wrap]'));
 
     initUploadBtn();
     initBlockSize();
