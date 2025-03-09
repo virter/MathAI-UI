@@ -102,7 +102,10 @@ async function startRequestProcess(file) {
 
         renderMathInElement(contentBlock);
         clearFileInput();
-        questBlock.show();
+
+        setTimeout(() => {
+            questBlock.show();
+        }, 5000);
 
         popupLoader.hide();
     } catch (error) {
